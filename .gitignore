@@ -28,3 +28,4 @@ yarn-error.log*
 # Python-based virtual environments
 env
 venv
+__pycache__
