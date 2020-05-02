@@ -49,8 +49,9 @@ class LightstripMain extends Component {
         // TODO: figure out where to store the relevant endpoint of the REST API rather than in this function
         var setEndpoint = "/set";
 
-        if (window.location.href != "")
+        if (window.location.href !== "")
             portAddr = ":" + parseInt(window.location.port);
+
 
         // Hard-coding http in here until it becomes a problem
         var dest = "http://" + window.location.hostname + portAddr + setEndpoint;
@@ -67,9 +68,11 @@ class LightstripMain extends Component {
             body: JSON.stringify(colorJson)
         };
 
+        console.log("Sending " + requestOptions.method + " request to backend at: " + dest);
+
         fetch(dest, requestOptions)
             .then(async response => {
-                const data = await response.json();
+                const data = await response;
 
                 if (!response.ok) {
                     const error = (data && data.message) || response.status;
@@ -79,8 +82,6 @@ class LightstripMain extends Component {
             .catch(error => {
                 console.error('Error sending colors to server', error);
             });
-
-        console.log("Sending POST request to backend at: " + dest);
 
     }
 
