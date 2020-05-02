@@ -24,3 +24,7 @@ yarn-error.log*
 
 # Editors
 .vscode
+
+# Python-based virtual environments
+env
+venv
