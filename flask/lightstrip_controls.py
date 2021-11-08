@@ -9,11 +9,11 @@ PIXEL_AMPS = 0.02
 class Lightstrip:
 
     # NeoPixels must be connected to D10, D12, D18 or D21
-    def __init__(self, pin=board.D18, pixel_count=30, order=neopixel.GRB, auto_write=False, brightness=0.2, max_amps=7.0) :
+    def __init__(self, pin=board.D18, pixel_count=30, order=neopixel.GRB, auto_write=False, max_amps=7.0) :
         self.pin = pin
         self.pixel_count = pixel_count
         
-        self.pixels = neopixel.NeoPixel(pin, pixel_count, brightness=brightness)
+        self.pixels = neopixel.NeoPixel(pin=pin,n=pixel_count)
     
         self.max_amps = max_amps
 
