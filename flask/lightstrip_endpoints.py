@@ -1,4 +1,4 @@
-import sys
+import sys # for printing to stderr
 from flask import Flask, request, Response
 from lightstrip_controls import set_color
 
@@ -36,4 +36,10 @@ def post_color_set():
     # Make call to the lightstrip API
     set_color(red, green, blue)
 
-    return "Successfully set the lightstrip colors"
+    return ("Successfully set the lightstrip colors", 200)
+
+@app.route("/get-colors", methods=['GET'])
+def get_colors():
+    # TODO: implement this
+
+    return ("Getting current colors is not implemented yet", 501)
