@@ -1,8 +1,10 @@
 import sys # for printing to stderr
 from flask import Flask, request, Response
-from lightstrip_controls import set_color
+from lightstrip_controls import Lightstrip
 
 app = Flask("lightstrip")
+
+strip = Lightstrip()
 
 @app.route("/set", methods=['POST'])
 def post_color_set():
@@ -34,7 +36,7 @@ def post_color_set():
         return Response(msg, status=400, mimetype="text/plain")
 
     # Make call to the lightstrip API
-    set_color(red, green, blue)
+    strip.set_color(red, green, blue)
 
     return ("Successfully set the lightstrip colors", 200)
 
