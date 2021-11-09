@@ -4,7 +4,7 @@ from lightstrip_controls import Lightstrip
 
 app = Flask("lightstrip")
 
-strip = Lightstrip()
+strip = Lightstrip(pixel_count=240)
 
 @app.route("/set", methods=['POST'])
 def post_color_set():
