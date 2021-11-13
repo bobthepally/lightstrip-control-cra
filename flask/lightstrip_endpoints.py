@@ -6,7 +6,7 @@ app = Flask("lightstrip")
 
 strip = Lightstrip(pixel_count=240)
 
-@app.route("/set", methods=['POST'])
+@app.route("/api/set", methods=['POST'])
 def post_color_set():
 
     # Read in the data from the request
@@ -40,7 +40,7 @@ def post_color_set():
 
     return ("Successfully set the lightstrip colors", 200)
 
-@app.route("/get-colors", methods=['GET'])
+@app.route("/api/get-colors", methods=['GET'])
 def get_colors():
     # TODO: implement this
 

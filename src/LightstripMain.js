@@ -47,7 +47,7 @@ class LightstripMain extends Component {
         var portAddr = "";
 
         // TODO: figure out where to store the relevant endpoint of the REST API rather than in this function
-        var setEndpoint = "/set";
+        var setEndpoint = "/api/set";
 
         if (window.location.href !== "")
             portAddr = ":" + parseInt(window.location.port);
