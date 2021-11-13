@@ -49,9 +49,14 @@ class LightstripMain extends Component {
         // TODO: figure out where to store the relevant endpoint of the REST API rather than in this function
         var setEndpoint = "/api/set";
 
-        if (window.location.href !== "")
-            portAddr = ":" + parseInt(window.location.port);
-
+        if (window.location.href !== "") {
+            
+            var port = parseInt(window.location.port);
+            if (Number.isNaN(port)) // If no port is specified in the URL, assume port 80
+                port = 80
+            
+            portAddr = ":" + port
+        }
 
         // Hard-coding http in here until it becomes a problem
         var dest = "http://" + window.location.hostname + portAddr + setEndpoint;
