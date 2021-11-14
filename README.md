@@ -1,4 +1,28 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Lightstrip 
+
+This is a small project started as an excuse to learn React via create-react-app, and how to build a vaguely functional web app. It's designed to run on a local server like a Raspberry Pi, hooked up to a WS2812B lightstrip. 
+
+## Installation
+
+### NodeJS
+
+Assuming node and yarn are installed already, dependencies can be installed via `yarn install` in the main project directory. 
+
+### Flask
+
+While not required, I recommend creating a virtual environment inside the `flask` directory for the python libraries and dependencies.
+
+Type `python -m venv venv` while inside the `flask` folder to create the environemnt. Then type `source venv/bin/activate` to run it. For more information on python virtual environments, you can [read more about them here.](https://docs.python.org/3/tutorial/venv.html)
+
+To install the relevant dependencies simply type `pip install -r requirements.txt` 
+
+## Deployment
+
+While there is no formal requirement for deployment, I used `nginx` as my front end and `gunicorn` to host the backend. Deploying is beyond the scope of this readme (for now), so I recommend [this guide](https://blog.miguelgrinberg.com/post/how-to-deploy-a-react--flask-project) if you want instructions. 
+
+## Arduino
+
+While you can in theory control the lights directly from a raspberry pi, the pi GPIO pins only output 3.3v by default, while a WS2812B strip expects 5v. With the right chip, this can be circumvented, but if you want an alternative, an `arduino` file is included. By uploading the receiver code to the arduino and plugging it into a USB port, the pi or server running this software can send it signals to control the lightstrip. Just change the `arduino` variable in the `lightstrip_controls.py` file to `True` to enable this setting.
 
 ## Available Scripts
 
@@ -12,10 +36,12 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.<br />
 You will also see any lint errors in the console.
 
-### `yarn test`
+### `yarn flask`
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Runs the flask backend in development mode. <br />
+Any POST requests made to [http://localhost:5000](http://localhost:5000) should set the colors of the lightstrip.
+
+Please note this script assumes the python virtual environment `venv` is located inside the `flask` folder of the project. If it's elsewhere, the script will likely fail. It can still be started manually, though.
 
 ### `yarn build`
 
@@ -40,8 +66,6 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 ## Learn More
 
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
 
 ### Code Splitting
 
