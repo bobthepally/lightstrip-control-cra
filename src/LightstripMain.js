@@ -3,18 +3,12 @@ import React, { Component } from 'react';
 
 /* Material-UI Components */
 import Button from '@material-ui/core/Button';
-import Slider from '@material-ui/core/Slider';
+// import Slider from '@material-ui/core/Slider';
 import Grid from '@material-ui/core/Grid';
-import Input from '@material-ui/core/Input';
+// import Input from '@material-ui/core/Input';
 
 /* react-color components */
 import { SketchPicker } from 'react-color';
-
-const styles = {
-    colorslider: {
-        width: 300
-    }
-}
 
 class LightstripMain extends Component {
     constructor(props) {
