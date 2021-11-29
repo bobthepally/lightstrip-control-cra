@@ -7,6 +7,9 @@ import Slider from '@material-ui/core/Slider';
 import Grid from '@material-ui/core/Grid';
 import Input from '@material-ui/core/Input';
 
+/* react-color components */
+import { SketchPicker } from 'react-color';
+
 const styles = {
     colorslider: {
         width: 300
@@ -18,21 +21,20 @@ class LightstripMain extends Component {
         super(props);
 
         this.state = {
-            red: 0,
-            green: 0,
-            blue: 0,
+            r: 0,
+            g: 0,
+            b: 0,
+            a: 1,
         }
 
-        this.updateColor = this.updateColor.bind(this);
         this.sendLightstripColor = this.sendLightstripColor.bind(this);
-        //this.getRGBString = this.getRGBString.bind(this);
     }
 
-    updateColor(color, value) {
-        this.setState( (prevState, props) => {
-            return prevState[color] = value
-        });
+    handleColorChange = (color) => {
 
+        console.log("r: " + color.rgb.r);
+
+        this.setState(color.rgb);
     }
 
     getRGBString(r, g, b) {
@@ -62,9 +64,9 @@ class LightstripMain extends Component {
         var dest = "http://" + window.location.hostname + portAddr + setEndpoint;
 
         var colorJson = {
-            red: this.state.red,
-            green: this.state.green,
-            blue: this.state.blue
+            red: this.state.r,
+            green: this.state.g,
+            blue: this.state.b
         }
 
         const requestOptions = {
@@ -91,114 +93,37 @@ class LightstripMain extends Component {
     }
 
     render() {
+        const colorValue = {r: this.state.r, g: this.state.g, b: this.state.b };
+
         return (
             <div>
-                <div>
-                    <div style={{
-                        backgroundColor: this.getRGBString(this.state.red, this.state.green, this.state.blue), 
-                        height: 40,
-                    }} />
+                <div style={{
+                   margin: "auto",
+                   width: "95%",
+                   padding: "10px"
+                }}>
                 
                     <Grid container spacing={1} alignItems="flex-start" direction="column">
-
-                        <Grid item>
-                            <ColorSlider
-                                color="red"
-                                updateColor={this.updateColor}
-                            />
-                        </Grid>
-
-                        <Grid item>
-                            <ColorSlider
-                                color="green"
-                                updateColor={this.updateColor}
-                            />
-                        </Grid>
-
-                        <Grid item>
-                            <ColorSlider
-                                color="blue"
-                                updateColor={this.updateColor}
-                            />
-                        </Grid>
-                    
+                        <SketchPicker 
+                            style={{
+                                border: "none"
+                            }}
+                            disableAlpha={true}
+                            color={colorValue}
+                            onChange={this.handleColorChange}
+                        />
                     </Grid>
                 </div>
 
-                <div>
+                <div style={{
+                    margin: "auto",
+                    width: "95%",
+                    padding: "10px"
+                }}>
                     <Button onClick={() => this.sendLightstripColor()} variant="contained" color="primary">Submit</Button>
                 </div>
             </div>
         )
-    }
-}
-
-class ColorSlider extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            colorValue: 0
-        }
-
-        this.handleColorChange = this.handleColorChange.bind(this);
-        this.handleInputChange = this.handleInputChange.bind(this);
-    }
-
-    handleColorChange(e, newValue) {
-        this.setState({
-            colorValue: newValue
-        })
-
-        this.props.updateColor(this.props.color, newValue);
-    }
-
-    handleInputChange(event) {
-        // TODO: input validation here
-
-        var newValue = event.target.value === '' ? '' : Number(event.target.value)
-
-        if (newValue > 255)
-            newValue = this.state.colorValue;
-
-        this.setState({
-            colorValue: newValue
-        })
-
-        this.props.updateColor(this.props.color, newValue);
-    }
-
-    render() {
-        return (
-            <div className="colorslider">
-                <Grid container spacing={2}>
-                    <Grid item>
-                        <Slider
-                            style={styles.colorslider}
-                            value={this.state.colorValue}
-                            onChange={this.handleColorChange}
-                            max={255}
-                            min={0}
-                            type='number'
-                            aria-labelledby="input-slider"
-                        />
-                    </Grid>
-
-                    <Grid item>
-                        <Input
-                            value={this.state.colorValue}
-                            margin="dense"
-                            onChange={this.handleInputChange}
-                            inputProps={{
-                                min: 0,
-                                max: 255,
-                                type: 'number',
-                                'aria-labelledby': 'input-slider',
-                            }}
-                        />
-                    </Grid>
-                </Grid>
-            </div>
-        );
     }
 }
 
