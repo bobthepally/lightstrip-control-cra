@@ -1,0 +1,15 @@
+server {
+    listen 80;
+    root /home/pi/lightstrip/lightstrip-control-cra/build;
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+
+    location /api {
+        include proxy_params;
+        proxy_buffering off;
+        proxy_pass http://127.0.0.1:5000;
+    }
+}
