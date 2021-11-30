@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 
 /* Material-UI Components */
 import Button from '@material-ui/core/Button';
-// import Slider from '@material-ui/core/Slider';
 import Grid from '@material-ui/core/Grid';
 // import Input from '@material-ui/core/Input';
 import Radio from '@material-ui/core/Radio';
@@ -14,6 +13,9 @@ import FormControl from '@material-ui/core/FormControl';
 
 /* react-color components */
 import { SketchPicker } from 'react-color';
+
+// Custom color slider component
+import ColorSlider from './color-slider';
 
 class LightstripMain extends Component {
     constructor(props) {
@@ -137,6 +139,10 @@ class LightstripMain extends Component {
                                 color={colorValue}
                                 onChange={this.handleColorChange}
                             />
+                        </Grid>
+
+                        <Grid item> 
+                            <ColorSlider />
                         </Grid>
 
                         <Grid item>
