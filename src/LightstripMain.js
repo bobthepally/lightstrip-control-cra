@@ -6,6 +6,11 @@ import Button from '@material-ui/core/Button';
 // import Slider from '@material-ui/core/Slider';
 import Grid from '@material-ui/core/Grid';
 // import Input from '@material-ui/core/Input';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
+// import FormLabel from '@material-ui/core/FormLabel';
 
 /* react-color components */
 import { SketchPicker } from 'react-color';
@@ -15,20 +20,43 @@ class LightstripMain extends Component {
         super(props);
 
         this.state = {
-            r: 0,
-            g: 0,
-            b: 0,
-            a: 1,
+            color: {
+                r: 0,
+                g: 0,
+                b: 0
+            },
+            pattern: 0,
         }
 
+        this.handlePatternChange = this.handlePatternChange.bind(this);
+        this.handleColorChange = this.handleColorChange.bind(this);
         this.sendLightstripColor = this.sendLightstripColor.bind(this);
     }
 
-    handleColorChange = (color) => {
+    handleColorChange(p_color) {
 
-        console.log("r: " + color.rgb.r);
+        this.setState((prevState, props) => {
+            return {
+                color: p_color,
+                pattern: prevState.pattern
+            }
+        });
+        // console.log("r: " + color.rgb.r);
 
-        this.setState(color.rgb);
+        //this.setState(color.rgb);
+    }
+
+    handlePatternChange(event) {
+        event.persist();
+
+        this.setState((prevState, props) => {
+            let p_pattern = parseInt(event.target.value);
+
+            return {
+                color: prevState.color,
+                pattern: p_pattern
+            }
+        });
     }
 
     getRGBString(r, g, b) {
@@ -58,9 +86,10 @@ class LightstripMain extends Component {
         var dest = "http://" + window.location.hostname + portAddr + setEndpoint;
 
         var colorJson = {
-            red: this.state.r,
-            green: this.state.g,
-            blue: this.state.b
+            red: this.state.color.r,
+            green: this.state.color.g,
+            blue: this.state.color.b,
+            pattern: this.state.pattern,
         }
 
         const requestOptions = {
@@ -87,7 +116,8 @@ class LightstripMain extends Component {
     }
 
     render() {
-        const colorValue = {r: this.state.r, g: this.state.g, b: this.state.b };
+        const colorValue = this.state.color
+        const pattern = this.state.pattern;
 
         return (
             <div>
@@ -98,15 +128,29 @@ class LightstripMain extends Component {
                 }}>
                 
                     <Grid container spacing={1} alignItems="flex-start" direction="column">
-                        <SketchPicker 
-                            style={{
-                                border: "none"
-                            }}
-                            disableAlpha={true}
-                            color={colorValue}
-                            onChange={this.handleColorChange}
-                        />
+                        <Grid item>
+                            <SketchPicker
+                                style={{
+                                    border: "none"
+                                }}
+                                disableAlpha={true}
+                                color={colorValue}
+                                onChange={this.handleColorChange}
+                            />
+                        </Grid>
+
+                        <Grid item>
+                            <FormControl component="fieldset">
+                                {/*<FormLabel component="legend">Pattern</FormLabel>*/}
+                                <RadioGroup aria-label="pattern" value={pattern} onChange={this.handlePatternChange} >
+                                    <FormControlLabel value={1} control={<Radio />} label="Dots"  />
+                                    <FormControlLabel value={0} control={<Radio />} label="Solid"  />
+                                </RadioGroup>
+                            </FormControl>
+                        </Grid>
+
                     </Grid>
+
                 </div>
 
                 <div style={{
