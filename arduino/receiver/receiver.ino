@@ -5,6 +5,8 @@
   #include <avr/power.h>
 #endif
 
+#include "patterns.h"
+
 // Signal pin
 #define PIN 6
 
@@ -39,7 +41,9 @@ void setup() {
 void loop() {
 
     uint32_t mainColor = pixels.Color(currentColorArray[0], currentColorArray[1], currentColorArray[2]);
-    singleColor(mainColor);
+    // singleColor(mainColor);
+
+    evenSpacedDots(pixels, mainColor, 0, 15, 2, 10);
 }
 
 void singleColor(uint32_t mainColor) {
