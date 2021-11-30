@@ -23,10 +23,10 @@ class ArduinoController:
             print(e)
             exit()
 
-    def send_colors(self, red, green, blue):
+    def send_colors(self, red, green, blue, pattern=0):
         
         # print(f"sending colors rgb({red},{green},{blue})")
 
-        color_array = bytes([int(red), int(green), int(blue)])
+        color_array = bytes([int(red), int(green), int(blue), int(pattern)])
         self.s_port.write(color_array)
 

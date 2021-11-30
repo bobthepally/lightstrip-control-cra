@@ -33,7 +33,7 @@ class Lightstrip:
 
 
     # Sets the colors of the lightstrip and returns a code depending on success or failure
-    def set_color(self, red, green, blue):
+    def set_color(self, red, green, blue, pattern=0):
 
         # For debugging
         # print(f"rgb({red},{green},{blue})")
@@ -49,7 +49,7 @@ class Lightstrip:
         # If the 'arduino' variable is set, this sends the data over the com port
         # instead of directly via GPIO pins
         if self.arduino:
-            self.controller.send_colors(red, green, blue)
+            self.controller.send_colors(red, green, blue, pattern)
 
         else:
             self.pixels.fill((red, green, blue))

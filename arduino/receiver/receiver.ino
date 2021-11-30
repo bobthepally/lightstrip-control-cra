@@ -23,7 +23,8 @@ int delayval = 500; // delay for half a second
 // Global variable for the current color
 char currentColorArray[] = {0,0,0};
 
-// void singleColor(uint32_t mainColor);
+// Global variable for the current pattern
+char currentPattern = 0;
 
 void setup() {
   // This is for Trinket 5V 16MHz, you can remove these three lines if you are not using a Trinket
@@ -41,9 +42,15 @@ void setup() {
 void loop() {
 
     uint32_t mainColor = pixels.Color(currentColorArray[0], currentColorArray[1], currentColorArray[2]);
-    // singleColor(mainColor);
-
-    evenSpacedDots(pixels, mainColor, 0, 15, 2, 10);
+    
+    switch(currentPattern) {
+      case 0:
+        singleColor(mainColor);
+        break;
+      case 1:
+        evenSpacedDots(pixels, mainColor, 0, 15, 2, 10);
+      break;
+    }
 }
 
 void singleColor(uint32_t mainColor) {
@@ -54,12 +61,16 @@ void singleColor(uint32_t mainColor) {
 
 void serialEvent() {
   while (Serial.available()) {
-    char tempArray[] = {0,0,0};
-    Serial.readBytes(tempArray, 3);
+    char tempArray[] = {0,0,0,0};
+    Serial.readBytes(tempArray, 4);
 
     // Sets the main color
     currentColorArray[0] = tempArray[0];
     currentColorArray[1] = tempArray[1];
     currentColorArray[2] = tempArray[2];
+
+    // Sets the pattern
+    currentPattern = tempArray[3];
+
   }
 }

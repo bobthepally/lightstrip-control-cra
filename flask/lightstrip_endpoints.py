@@ -4,7 +4,7 @@ from lightstrip_controls import Lightstrip
 
 app = Flask("lightstrip")
 
-strip = Lightstrip(pixel_count=240)
+strip = Lightstrip(pixel_count=173)
 
 @app.route("/api/set", methods=['POST'])
 def post_color_set():
@@ -20,6 +20,12 @@ def post_color_set():
         print(msg, file=sys.stderr)
         return Response(msg, status=400, mimetype="text/plain")
 
+    # Read in data for the specified pattern, defaulting to 0 if it's unspecified.
+    try:
+        pattern = data['pattern']
+    except KeyError as e:
+        pattern = 0
+
     # Data validation section
     try:
         current_key = 'red'
@@ -30,13 +36,17 @@ def post_color_set():
 
         current_key = 'blue'
         int_blue = int(blue)
+
+        current_key = 'pattern'
+        int_pattern = int(pattern)
+
     except ValueError as e:    
         msg = f"Color argument \'{current_key}\' is not an int"
         print(msg, file=sys.stderr)
         return Response(msg, status=400, mimetype="text/plain")
 
     # Make call to the lightstrip API
-    strip.set_color(red, green, blue)
+    strip.set_color(red, green, blue, pattern)
 
     return ("Successfully set the lightstrip colors", 200)
 
