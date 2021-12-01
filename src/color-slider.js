@@ -4,6 +4,9 @@ import Grid from '@material-ui/core/Grid';
 
 import { HuePicker, AlphaPicker } from 'react-color';
 
+// TODO: make this an import, I think?
+var tinycolor = require('tinycolor2');
+
 class ColorSlider extends Component {
     
     constructor(props) {
@@ -28,28 +31,44 @@ class ColorSlider extends Component {
 
         let hue = color.hsv.h;
         let sat = color.hsv.s;
+        
+        let newColor = this.state.color;
+        
+        newColor.hsv.h = hue;
+        newColor.hsv.s = sat;
+
         this.setState((prevState, props) => {
-            prevState.color.hsv.h = hue;
-            prevState.color.hsv.s = sat;
+            prevState.color = newColor;
             return prevState;
         });
 
-        //console.log(this.state);
+        this.updateParent(newColor);
     }
 
     // we're going to convert the alpha value to the v of hsv
     handleBrightnessChange(color) {
+        
         let brightness = color.hsv.a;
+        
+        let newColor = this.state.color;
+        newColor.hsv.v = brightness;
 
         this.setState((prevState, props) => {
             prevState.color.hsv.v = brightness;
             return prevState;
         });
 
-        //console.log(this.state);
+        this.updateParent(newColor);
 
     }
 
+    updateParent(p_color) {
+        // we'll convert the color to rgb first
+        let rgb_color = tinycolor(p_color.hsv).toRgb();
+        p_color.rgb = rgb_color;
+
+        this.props.onChange(rgb_color);
+    }
 
     render() {
 

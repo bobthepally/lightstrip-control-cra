@@ -118,7 +118,7 @@ class LightstripMain extends Component {
     }
 
     render() {
-        const colorValue = this.state.color
+        // const colorValue = this.state.color
         const pattern = this.state.pattern;
 
         return (
@@ -130,19 +130,8 @@ class LightstripMain extends Component {
                 }}>
                 
                     <Grid container spacing={1} alignItems="flex-start" direction="column">
-                        <Grid item>
-                            <SketchPicker
-                                style={{
-                                    border: "none"
-                                }}
-                                disableAlpha={true}
-                                color={colorValue}
-                                onChange={this.handleColorChange}
-                            />
-                        </Grid>
-
                         <Grid item> 
-                            <ColorSlider />
+                            <ColorSlider onChange={this.handleColorChange} />
                         </Grid>
 
                         <Grid item>
