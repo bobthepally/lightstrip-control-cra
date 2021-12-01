@@ -18,7 +18,7 @@ class ColorSlider extends Component {
                     h: 0,
                     s: 1,
                     v: 1,
-                    a: 1,
+                    a: 0,
                 }
             }
         };
