@@ -11,9 +11,6 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 // import FormLabel from '@material-ui/core/FormLabel';
 
-/* react-color components */
-import { SketchPicker } from 'react-color';
-
 // Custom color slider component
 import ColorSlider from './color-slider';
 
