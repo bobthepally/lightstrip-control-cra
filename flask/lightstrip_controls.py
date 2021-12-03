@@ -36,7 +36,7 @@ class Lightstrip:
     def set_color(self, red, green, blue, pattern=0):
 
         # For debugging
-        # print(f"rgb({red},{green},{blue})")
+        print(f"rgb({red},{green},{blue}), {pattern}")
 
         single_pixel_amperage = (red / 255) * PIXEL_AMPS + (green / 255) * PIXEL_AMPS + (blue / 255) * PIXEL_AMPS
         total_amperage = single_pixel_amperage * self.pixel_count
