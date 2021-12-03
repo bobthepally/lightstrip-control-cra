@@ -21,10 +21,10 @@ Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ80
 int delayval = 500; // delay for half a second
 
 // Global variable for the current color
-char currentColorArray[] = {0,0,0};
+unsigned char currentColorArray[] = {0,0,0};
 
 // Global variable for the current pattern
-char currentPattern = 0;
+unsigned char currentPattern = 0;
 
 void setup() {
   // This is for Trinket 5V 16MHz, you can remove these three lines if you are not using a Trinket
@@ -49,7 +49,32 @@ void loop() {
         break;
       case 1:
         evenSpacedDots(pixels, mainColor, 0, 15, 2, 10);
-      break;
+        break;
+      case 2:
+        fade_in_and_out(pixels, mainColor);
+        break;
+      default:
+        singleColor(0);
+        break;
+
+    }
+
+    // Check if new colors are in the serial buffer
+    if (Serial.available()) {
+      unsigned char tempArray[] = {0, 0, 0, 0};
+      size_t bytesRead = Serial.readBytes(tempArray, 4);
+
+        // Sets the main color
+      currentColorArray[0] = tempArray[0];
+      currentColorArray[1] = tempArray[1];
+      currentColorArray[2] = tempArray[2];
+
+      // Sets the pattern
+      currentPattern = tempArray[3];
+
+      while (Serial.available()) 
+        Serial.read();
+
     }
 }
 
@@ -57,20 +82,4 @@ void singleColor(uint32_t mainColor) {
   for (int i = 0; i < NUMPIXELS; i++)
     pixels.setPixelColor(i, mainColor);
   pixels.show();
-}
-
-void serialEvent() {
-  while (Serial.available()) {
-    char tempArray[] = {0,0,0,0};
-    Serial.readBytes(tempArray, 4);
-
-    // Sets the main color
-    currentColorArray[0] = tempArray[0];
-    currentColorArray[1] = tempArray[1];
-    currentColorArray[2] = tempArray[2];
-
-    // Sets the pattern
-    currentPattern = tempArray[3];
-
-  }
 }
