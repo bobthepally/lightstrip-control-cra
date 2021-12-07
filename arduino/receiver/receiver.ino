@@ -18,13 +18,15 @@
 // example for more information on possible values.
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 
-int delayval = 500; // delay for half a second
-
 // Global variable for the current color
 unsigned char currentColorArray[] = {0,0,0};
 
 // Global variable for the current pattern
 unsigned char currentPattern = 0;
+
+unsigned long pattern_counter = 0;
+unsigned long last_pattern_time = 0;
+unsigned long interval = 10; // ms delay between pattern updates
 
 void setup() {
   // This is for Trinket 5V 16MHz, you can remove these three lines if you are not using a Trinket
@@ -37,27 +39,36 @@ void setup() {
   pixels.begin(); // This initializes the NeoPixel library.
   singleColor(0); // turns off all lights
 
+  last_pattern_time = millis();
 }
 
 void loop() {
 
     uint32_t mainColor = pixels.Color(currentColorArray[0], currentColorArray[1], currentColorArray[2]);
-    
-    switch(currentPattern) {
+
+    if (millis() >= last_pattern_time + interval) {
+
+      switch (currentPattern) {
       case 0:
         singleColor(mainColor);
         break;
       case 1:
-        evenSpacedDots(pixels, mainColor, 0, 15, 2, 10);
+        moving_color(pixels, mainColor, 0, 10, pattern_counter);
         break;
-      case 2:
-        fade_in_and_out(pixels, mainColor);
-        break;
+      // case 2:
+      //   fade_in_and_out(pixels, mainColor);
+      //   break;
       default:
         singleColor(0);
-        break;
+      }
 
+      //moving_color(pixels, mainColor, 0, 10, pattern_counter);
+
+      pattern_counter++;
+      last_pattern_time = millis();
     }
+
+   // singleColor(mainColor);
 
     // Check if new colors are in the serial buffer
     if (Serial.available()) {
@@ -70,6 +81,9 @@ void loop() {
       currentColorArray[2] = tempArray[2];
 
       // Sets the pattern
+      //if (tempArray[3] != currentPattern) // if the pattern changes, reset the counter
+      //  pattern_counter = 0;
+
       currentPattern = tempArray[3];
 
       while (Serial.available()) 

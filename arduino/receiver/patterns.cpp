@@ -35,6 +35,34 @@ void fade_in_and_out(Adafruit_NeoPixel &p, uint32_t color) {
     }
 }
 
+/*
+void even_spaced_dots(Adafruit_NeoPixel &p, uint32_t foreground_color, uint32_t background_color, int dot_num, int dot_length, unsigned long counter) {
+    // the counter is used to represent each stage of the dots
+
+    const uint16_t count = p.numPixels();
+    int dotInterval = count / dot_num;
+
+    
+
+}
+*/
+
+void moving_color(Adafruit_NeoPixel &p, uint32_t foreground_color, uint32_t background_color, uint16_t length, unsigned long counter) {
+    
+    const uint16_t pixels = p.numPixels();
+    unsigned long stage = counter % pixels;
+
+    // p.fill(foreground_color);
+
+    for (uint16_t i = 0; i < pixels; i++) {
+        if (i < (length + stage) and i >= stage)
+            p.setPixelColor(i, foreground_color);
+        else
+            p.setPixelColor(i, background_color);
+    }
+
+    p.show();
+}
 
 void evenSpacedDots(Adafruit_NeoPixel &p, uint32_t foregroundColor, uint32_t backgroundColor, int dotNum, int dotLength, unsigned long timeInterval) {
     
