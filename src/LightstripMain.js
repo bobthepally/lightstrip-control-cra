@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 /* Material-UI Components */
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-// import Input from '@material-ui/core/Input';
+import Input from '@material-ui/core/Input';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -54,6 +54,29 @@ class LightstripMain extends Component {
             return {
                 color: prevState.color,
                 pattern: p_pattern
+            }
+        });
+    }
+
+    handleInputChange(event, color) {
+
+        let newValue = event.target.value === '' ? '' : Number(event.target.value)
+
+        if (newValue > 255)
+            newValue = 255;
+
+        let newColor = this.state.color;
+        if (color === "red")
+            newColor.r = newValue;
+        else if (color === "green")
+            newColor.g = newValue;
+        else if (color === "blue")
+            newColor.b = newValue;
+
+        this.setState((prevState, props) => {
+            return {
+                color: newColor,
+                pattern: prevState.pattern
             }
         });
     }
@@ -115,7 +138,7 @@ class LightstripMain extends Component {
     }
 
     render() {
-        // const colorValue = this.state.color
+        const colorValue = this.state.color
         const pattern = this.state.pattern;
 
         return (
@@ -129,6 +152,49 @@ class LightstripMain extends Component {
                     <Grid container spacing={1} alignItems="flex-start" direction="column">
                         <Grid item> 
                             <ColorSlider onChange={this.handleColorChange} />
+                        </Grid>
+
+                        <Grid item>
+                            <Grid container spacing={2}> 
+                                <Grid item>
+                                    <Input
+                                        value={colorValue.r}
+                                        margin="dense"
+                                        onChange={(e) => {this.handleInputChange(e, "red");}}
+                                        inputProps={{
+                                            min: 0,
+                                            max: 255,
+                                            type: 'number'
+                                        }}
+                                    />
+                                </Grid>
+
+                                <Grid item>
+                                    <Input
+                                        value={colorValue.g}
+                                        margin="dense"
+                                        onChange={(e) => {this.handleInputChange(e, "green");}}
+                                        inputProps={{
+                                            min: 0,
+                                            max: 255,
+                                            type: 'number'
+                                        }}
+                                    />
+                                </Grid>
+
+                                <Grid item>
+                                    <Input
+                                        value={colorValue.b}
+                                        margin="dense"
+                                        onChange={(e) => {this.handleInputChange(e, "blue");}}
+                                        inputProps={{
+                                            min: 0,
+                                            max: 255,
+                                            type: 'number'
+                                        }}
+                                    />
+                                </Grid>
+                            </Grid>
                         </Grid>
 
                         <Grid item>
