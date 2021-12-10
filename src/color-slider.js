@@ -23,6 +23,16 @@ class ColorSlider extends Component {
             }
         };
 
+        /*
+        this.props.color = {
+            hsv: {
+                h: 0,
+                s: 1,
+                v: 1,
+                a: 0,
+            }
+        }
+        */
         this.handleColorChange = this.handleColorChange.bind(this);
         this.handleBrightnessChange = this.handleBrightnessChange.bind(this);
     }
@@ -72,14 +82,17 @@ class ColorSlider extends Component {
 
     render() {
 
-        const colorValue = this.state.color;
+        //const colorValue = this.state.color;
         //const test = {h: 100, s: 0, v: 0, a: 0.75}; 
 
+        const colorValue = this.props.color;
+        const colorHSV = tinycolor(colorValue).toHsv();
+        
         const brightness = {
-            h: this.state.color.hsv.h,
-            s: this.state.color.hsv.s,
+            h: colorHSV.h,
+            s: colorHSV.s,
             v: 1,
-            a: this.state.color.hsv.v
+            a: colorHSV.v
         };
 
         return (

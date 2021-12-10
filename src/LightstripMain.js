@@ -151,7 +151,7 @@ class LightstripMain extends Component {
                 
                     <Grid container spacing={1} alignItems="flex-start" direction="column">
                         <Grid item> 
-                            <ColorSlider onChange={this.handleColorChange} />
+                            <ColorSlider onChange={this.handleColorChange} color={colorValue} />
                         </Grid>
 
                         <Grid item>
