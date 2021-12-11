@@ -12,47 +12,16 @@ class ColorSlider extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            color: {
-                hsv: {
-                    h: 0,
-                    s: 1,
-                    v: 1,
-                    a: 0,
-                }
-            }
-        };
-
-        /*
-        this.props.color = {
-            hsv: {
-                h: 0,
-                s: 1,
-                v: 1,
-                a: 0,
-            }
-        }
-        */
         this.handleColorChange = this.handleColorChange.bind(this);
         this.handleBrightnessChange = this.handleBrightnessChange.bind(this);
     }
 
     handleColorChange(color) {
 
-        let hue = color.hsv.h;
-        let sat = color.hsv.s;
-        
-        let newColor = this.state.color;
-        
-        newColor.hsv.h = hue;
-        newColor.hsv.s = sat;
+        color.v = 1;
+        color.a = 1;
 
-        this.setState((prevState, props) => {
-            prevState.color = newColor;
-            return prevState;
-        });
-
-        this.updateParent(newColor);
+        this.updateParent(color);
     }
 
     // we're going to convert the alpha value to the v of hsv
@@ -60,15 +29,10 @@ class ColorSlider extends Component {
         
         let brightness = color.hsv.a;
         
-        let newColor = this.state.color;
-        newColor.hsv.v = brightness;
+        color.hsv.v = brightness;
+        color.hsv.a = 1;
 
-        this.setState((prevState, props) => {
-            prevState.color.hsv.v = brightness;
-            return prevState;
-        });
-
-        this.updateParent(newColor);
+        this.updateParent(color);
 
     }
 
@@ -81,9 +45,6 @@ class ColorSlider extends Component {
     }
 
     render() {
-
-        //const colorValue = this.state.color;
-        //const test = {h: 100, s: 0, v: 0, a: 0.75}; 
 
         const colorValue = this.props.color;
         const colorHSV = tinycolor(colorValue).toHsv();
