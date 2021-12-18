@@ -28,6 +28,9 @@ unsigned long pattern_counter = 0;
 unsigned long last_pattern_time = 0;
 unsigned long interval = 10; // ms delay between pattern updates
 
+unsigned char serialDataArray[] = {0,0,0,0};
+size_t serialIndex = 0;
+
 void setup() {
   // This is for Trinket 5V 16MHz, you can remove these three lines if you are not using a Trinket
 #if defined (__AVR_ATtiny85__)
@@ -71,23 +74,24 @@ void loop() {
    // singleColor(mainColor);
 
     // Check if new colors are in the serial buffer
-    if (Serial.available()) {
-      unsigned char tempArray[] = {0, 0, 0, 0};
-      size_t bytesRead = Serial.readBytes(tempArray, 4);
+    if (Serial.available() > 0) {
+    
+      serialDataArray[serialIndex] = Serial.read();
+      serialIndex++;
 
-        // Sets the main color
-      currentColorArray[0] = tempArray[0];
-      currentColorArray[1] = tempArray[1];
-      currentColorArray[2] = tempArray[2];
+      if (serialIndex >= 4) {
+        
+        // clear the buffer
+        //while (Serial.available())
+        //  Serial.read();
 
-      // Sets the pattern
-      //if (tempArray[3] != currentPattern) // if the pattern changes, reset the counter
-      //  pattern_counter = 0;
+        currentColorArray[0] = serialDataArray[0];
+        currentColorArray[1] = serialDataArray[1];
+        currentColorArray[2] = serialDataArray[2];
 
-      currentPattern = tempArray[3];
+        currentPattern = 0;
 
-      while (Serial.available()) 
-        Serial.read();
+      }
 
     }
 }
