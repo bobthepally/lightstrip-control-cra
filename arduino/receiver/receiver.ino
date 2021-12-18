@@ -1,6 +1,8 @@
 // This module receives signals over a COM port and sets the lightstrip color based on those signals
 
 #include <Adafruit_NeoPixel.h>
+#include <SerialTransfer.h>
+
 #ifdef __AVR__
   #include <avr/power.h>
 #endif
@@ -31,6 +33,8 @@ unsigned long interval = 10; // ms delay between pattern updates
 unsigned char serialDataArray[] = {0,0,0,0};
 size_t serialIndex = 0;
 
+SerialTransfer pyTransfer;
+
 void setup() {
   // This is for Trinket 5V 16MHz, you can remove these three lines if you are not using a Trinket
 #if defined (__AVR_ATtiny85__)
@@ -38,7 +42,8 @@ void setup() {
 #endif
   // End of trinket special code
 
-  Serial.begin(9600);
+  Serial.begin(115200);
+  pyTransfer.begin(Serial);
   pixels.begin(); // This initializes the NeoPixel library.
   singleColor(0); // turns off all lights
 
@@ -74,25 +79,29 @@ void loop() {
    // singleColor(mainColor);
 
     // Check if new colors are in the serial buffer
-    if (Serial.available() > 0) {
-    
-      serialDataArray[serialIndex] = Serial.read();
-      serialIndex++;
+    if (pyTransfer.available()) {
 
-      if (serialIndex >= 4) {
-        
-        // clear the buffer
-        //while (Serial.available())
-        //  Serial.read();
+      /*
+      if (pyTransfer.bytesRead >= 4) {
+        currentColorArray[0] = pyTransfer.packet.txBuff[0];
+        currentColorArray[1] = pyTransfer.packet.txBuff[1];
+        currentColorArray[2] = pyTransfer.packet.txBuff[2];
+      
+        currentPattern = pyTransfer.packet.txBuff[3];
+      }
+      */
 
-        currentColorArray[0] = serialDataArray[0];
-        currentColorArray[1] = serialDataArray[1];
-        currentColorArray[2] = serialDataArray[2];
+      uint32_t temp = 0;
+      
+      uint16_t recSize = 0;
 
-        currentPattern = 0;
-
+      for (uint16_t i = 0; i < 3; i++) {
+        recSize = pyTransfer.rxObj(temp, recSize);
+        currentColorArray[i] = temp;
       }
 
+      recSize = pyTransfer.rxObj(temp, recSize);
+      currentPattern = temp;
     }
 }
 
