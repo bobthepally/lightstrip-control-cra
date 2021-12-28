@@ -14,6 +14,39 @@ import FormControl from '@material-ui/core/FormControl';
 // Custom color slider component
 import ColorSlider from './color-slider';
 
+// TODO: figure out how css is properly done in a react app
+const colorPalette = {
+    lightest: "#f0f1f3",
+    light: "#7cdbef",
+    middle: "#308EE4",
+    dark: "#21408F",
+    darkest: "#131D44"
+};
+
+const textInputStyle = {
+    color: colorPalette.lightest,
+    backgroundColor: colorPalette.dark,
+    borderRadius: "5px",
+    paddingLeft: "5px",
+    paddingRight: "5px"
+};
+
+const radioButtonStyle = {
+    color: colorPalette.lightest,
+    backgroundColor: colorPalette.dark,
+    borderRadius: "5px",
+    paddingLeft: "5px",
+};
+
+const radioStyle = {
+    color: colorPalette.middle,
+};
+
+const buttonStyle = {
+    color: colorPalette.lightest,
+    backgroundColor: colorPalette.dark,
+};
+
 class LightstripMain extends Component {
     constructor(props) {
         super(props);
@@ -160,6 +193,7 @@ class LightstripMain extends Component {
                                     <Input
                                         value={colorValue.r}
                                         margin="dense"
+                                        style={textInputStyle}
                                         onChange={(e) => {this.handleInputChange(e, "red");}}
                                         inputProps={{
                                             min: 0,
@@ -173,6 +207,7 @@ class LightstripMain extends Component {
                                     <Input
                                         value={colorValue.g}
                                         margin="dense"
+                                        style={textInputStyle}
                                         onChange={(e) => {this.handleInputChange(e, "green");}}
                                         inputProps={{
                                             min: 0,
@@ -186,6 +221,7 @@ class LightstripMain extends Component {
                                     <Input
                                         value={colorValue.b}
                                         margin="dense"
+                                        style={textInputStyle}
                                         onChange={(e) => {this.handleInputChange(e, "blue");}}
                                         inputProps={{
                                             min: 0,
@@ -200,9 +236,9 @@ class LightstripMain extends Component {
                         <Grid item>
                             <FormControl component="fieldset">
                                 {/*<FormLabel component="legend">Pattern</FormLabel>*/}
-                                <RadioGroup aria-label="pattern" value={pattern} onChange={this.handlePatternChange} >
-                                    <FormControlLabel value={1} control={<Radio />} label="Dots"  />
-                                    <FormControlLabel value={0} control={<Radio />} label="Solid"  />
+                                <RadioGroup aria-label="pattern" value={pattern} onChange={this.handlePatternChange} style={radioButtonStyle}>
+                                    <FormControlLabel value={1} control={<Radio style={radioStyle} />} label="Dots"  />
+                                    <FormControlLabel value={0} control={<Radio style={radioStyle} />} label="Solid"  />
                                 </RadioGroup>
                             </FormControl>
                         </Grid>
@@ -214,9 +250,9 @@ class LightstripMain extends Component {
                 <div style={{
                     margin: "auto",
                     width: "95%",
-                    padding: "10px"
+                    padding: "10px",
                 }}>
-                    <Button onClick={() => this.sendLightstripColor()} variant="contained" color="primary">Submit</Button>
+                    <Button onClick={() => this.sendLightstripColor()} variant="contained" color="inherit" style={buttonStyle} >Submit</Button>
                 </div>
             </div>
         )
