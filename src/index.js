@@ -2,10 +2,20 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import LightstripMain from './LightstripMain';
 import * as serviceWorker from './serviceWorker';
+import './index.css';
+
+// Used mostly to set the background color. feels like a terrible hack,
+// there must be a better way of doing this.
+import { Helmet } from 'react-helmet';
 
 ReactDOM.render(
   <React.StrictMode>
-    <LightstripMain />
+    <div className="application">
+      <Helmet>
+        <style>{'body {background-color: #131D44 };'}</style>
+      </Helmet>
+      <LightstripMain />
+    </div>
   </React.StrictMode>,
   document.getElementById('root')
 );

@@ -10,6 +10,7 @@
     "react": "^16.13.1",
     "react-color": "^2.19.3",
     "react-dom": "^16.13.1",
+    "react-helmet": "^6.1.0",
     "react-scripts": "3.4.1",
     "tinycolor2": "^1.4.2"
   },
