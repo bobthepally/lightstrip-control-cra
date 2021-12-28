@@ -1,20 +1,22 @@
-import serial
+# import serial
 
-from time import sleep
+from pySerialTransfer import pySerialTransfer as txfer
+
+from NamedAtomicLock import NamedAtomicLock
 
 COM_PORT = "/dev/ttyACM0"
 
 class ArduinoController:
-
     def __init__(self, com_port=COM_PORT, pixel_count=30):
         self.com_port = com_port
         self.pixel_count = pixel_count
 
         # Initialize the COM port
         try:
-            self.s_port = serial.Serial(com_port, timeout=1, baudrate=9600)
-            # self.arduino.flushInput()
-            # self.arduino.flushOutput()
+            # self.s_port = serial.Serial(com_port, timeout=1, baudrate=9600)
+            
+            self.link = txfer.SerialTransfer(com_port)
+            self.link.open()
 
         except Exception as e:
             # This really shouldn't catch all exceptions and print exceptions about COM ports.
@@ -27,6 +29,18 @@ class ArduinoController:
         
         # print(f"sending colors rgb({red},{green},{blue})")
 
-        color_array = bytes([int(red), int(green), int(blue), int(pattern)])
-        self.s_port.write(color_array)
+        array_size = 0
+
+        color_array = [int(red), int(green), int(blue), int(pattern)]
+        array_size += self.link.tx_obj(color_array)
+
+        print(array_size)
+
+        lightstripSerialLock = NamedAtomicLock("lightstripSerialLock")
+
+        if lightstripSerialLock.acquire(timeout=15):
+            try:
+                self.link.send(array_size)
+            finally:
+                lightstripSerialLock.release()
 
