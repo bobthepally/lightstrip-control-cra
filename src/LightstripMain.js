@@ -139,7 +139,7 @@ class LightstripMain extends Component {
 
         // Hard-coding http in here until it becomes a problem
         var dest = "http://" + window.location.hostname + portAddr + setEndpoint;
-
+ 
         var colorJson = {
             red: this.state.color.r,
             green: this.state.color.g,
