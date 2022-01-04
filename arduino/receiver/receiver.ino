@@ -63,14 +63,12 @@ void loop() {
       case 1:
         moving_color(pixels, mainColor, 0, 10, pattern_counter);
         break;
-      // case 2:
-      //   fade_in_and_out(pixels, mainColor);
-      //   break;
+      case 2:
+        two_colors(pixels, pixels.Color(255,0,0), pixels.Color(0,0,255), 0, 45, 15, pattern_counter);
+        break;
       default:
         singleColor(0);
       }
-
-      //moving_color(pixels, mainColor, 0, 10, pattern_counter);
 
       pattern_counter++;
       last_pattern_time = millis();

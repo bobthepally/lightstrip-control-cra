@@ -239,6 +239,7 @@ class LightstripMain extends Component {
                                 <RadioGroup aria-label="pattern" value={pattern} onChange={this.handlePatternChange} style={radioButtonStyle}>
                                     <FormControlLabel value={1} control={<Radio style={radioStyle} />} label="Dots"  />
                                     <FormControlLabel value={0} control={<Radio style={radioStyle} />} label="Solid"  />
+                                    <FormControlLabel value={2} control={<Radio style={radioStyle} />} label="Beat-Saber"  />
                                 </RadioGroup>
                             </FormControl>
                         </Grid>
