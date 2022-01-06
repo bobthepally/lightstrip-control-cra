@@ -13,6 +13,7 @@ import FormControl from '@material-ui/core/FormControl';
 
 // Custom color slider component
 import ColorSlider from './color-slider';
+import ColorCircle from './color-circle';
 
 // TODO: figure out how css is properly done in a react app
 const colorPalette = {
@@ -185,6 +186,10 @@ class LightstripMain extends Component {
                     <Grid container spacing={1} alignItems="flex-start" direction="column">
                         <Grid item> 
                             <ColorSlider onChange={this.handleColorChange} color={colorValue} />
+                        </Grid>
+
+                        <Grid item> 
+                            <ColorCircle/>
                         </Grid>
 
                         <Grid item>
