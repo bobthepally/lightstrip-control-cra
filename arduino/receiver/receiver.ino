@@ -63,9 +63,12 @@ void loop() {
       case 1:
         moving_color(pixels, mainColor, 0, 10, pattern_counter);
         break;
-      case 2: // beat-saber special case
-        //two_colors(pixels, pixels.Color(255,0,0), pixels.Color(0,0,255), 0, 60, 60, pattern_counter);
+      case 2:
         fade_in_and_out(pixels, mainColor, 0.02, pattern_counter);
+        break;
+      case 3:
+        // two_colors(pixels, pixels.Color(255,0,0), pixels.Color(0,0,255), 0, 60, 60, pattern_counter);
+        two_color_fade_in_and_out(pixels, pixels.Color(200,0,0), pixels.Color(0,40,255), 0.02, pattern_counter);
         break;
       default:
         singleColor(0);

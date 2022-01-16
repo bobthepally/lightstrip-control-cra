@@ -15,40 +15,6 @@ uint8_t unpack_blue(uint32_t color) {
     return (uint8_t) color;
 }
 
-/*
-void fade_in_and_out(Adafruit_NeoPixel &p, uint32_t color) {
-    
-    const int time_interval = 50; // delay between each brightness stage
-    const size_t count = p.numPixels();
-    const double delta = 0.1; // change in brightness per loop
-    
-    double r = unpack_red(color);
-    double g = unpack_green(color);
-    double b = unpack_blue(color);
-
-    double brightness = 1.0;
-
-    while (brightness > 0) {
-        uint32_t dimmed_color = p.Color(r * brightness, g * brightness, b * brightness);
-        p.fill(dimmed_color);
-        brightness -= delta;
-        delay(time_interval);
-    }
-}
-*/
-
-/*
-void even_spaced_dots(Adafruit_NeoPixel &p, uint32_t foreground_color, uint32_t background_color, int dot_num, int dot_length, unsigned long counter) {
-    // the counter is used to represent each stage of the dots
-
-    const uint16_t count = p.numPixels();
-    int dotInterval = count / dot_num;
-
-    
-
-}
-*/
-
 void moving_color(Adafruit_NeoPixel &p, uint32_t foreground_color, uint32_t background_color, uint16_t length, unsigned long counter) {
     
     const uint16_t pixels = p.numPixels();
@@ -152,6 +118,8 @@ void fade(Adafruit_NeoPixel &p, uint32_t foregroundColor1, double delta, double 
 
   double brightness = start_brightness;
   brightness = brightness + (delta * (stage + 1));
+  
+  // brightness = log(1 + brightness);
 
   r *= brightness;
   g *= brightness;
@@ -175,4 +143,15 @@ void fade_in_and_out(Adafruit_NeoPixel &p, uint32_t foreground_color, double del
     fade(p, foreground_color, -delta, 1, 0, counter);
   }
 
+}
+
+void two_color_fade_in_and_out(Adafruit_NeoPixel &p, uint32_t color1, uint32_t color2, double delta, unsigned long counter) {
+  unsigned long stage_count = 4 * (1 / delta);
+  unsigned long stage = counter % stage_count;
+
+  if (stage < stage_count / 2) {
+    fade_in_and_out(p, color1, delta, counter);
+  } else {
+    fade_in_and_out(p, color2, delta, counter);
+  }
 }
