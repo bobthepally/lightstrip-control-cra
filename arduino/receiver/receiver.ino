@@ -28,7 +28,7 @@ unsigned char currentPattern = 0;
 
 unsigned long pattern_counter = 0;
 unsigned long last_pattern_time = 0;
-unsigned long interval = 10; // ms delay between pattern updates
+unsigned long interval = 25; // ms delay between pattern updates
 
 unsigned char serialDataArray[] = {0,0,0,0};
 size_t serialIndex = 0;
@@ -63,8 +63,9 @@ void loop() {
       case 1:
         moving_color(pixels, mainColor, 0, 10, pattern_counter);
         break;
-      case 2:
-        two_colors(pixels, pixels.Color(255,0,0), pixels.Color(0,0,255), 0, 45, 15, pattern_counter);
+      case 2: // beat-saber special case
+        //two_colors(pixels, pixels.Color(255,0,0), pixels.Color(0,0,255), 0, 60, 60, pattern_counter);
+        fade_in_and_out(pixels, mainColor, 0.02, pattern_counter);
         break;
       default:
         singleColor(0);

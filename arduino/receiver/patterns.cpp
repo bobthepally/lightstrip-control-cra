@@ -15,6 +15,7 @@ uint8_t unpack_blue(uint32_t color) {
     return (uint8_t) color;
 }
 
+/*
 void fade_in_and_out(Adafruit_NeoPixel &p, uint32_t color) {
     
     const int time_interval = 50; // delay between each brightness stage
@@ -34,6 +35,7 @@ void fade_in_and_out(Adafruit_NeoPixel &p, uint32_t color) {
         delay(time_interval);
     }
 }
+*/
 
 /*
 void even_spaced_dots(Adafruit_NeoPixel &p, uint32_t foreground_color, uint32_t background_color, int dot_num, int dot_length, unsigned long counter) {
@@ -101,38 +103,6 @@ void backfill(Adafruit_NeoPixel &p, uint32_t foregroundColor, uint32_t backgroun
   }
 }
 
-/*
-void movingTwoColors(Adafruit_NeoPixel &p, uint32_t foregroundColor1, uint32_t foregroundColor2, uint32_t backgroundColor, int movingPixels, unsigned long counter) {
-  const size_t pixels = p.numPixels();
-  unsigned long stage = counter % pixels;
-
-  int currentLocation = 0;
-  int locationMovement = 1;
-  for (int j = 0; j <= (pixels - movingPixels) * 2; j++) { // For a full cycle
-    for (int i = 0; i < pixels; i++) {
-      uint32_t currentColor = 0;
-      if (i >= currentLocation && i < currentLocation + movingPixels) {
-        // pixels.setPixelColor(i, foregroundColor1);
-        currentColor += foregroundColor1;
-      }
-      if (i <= pixels - currentLocation && i > pixels - currentLocation - movingPixels) {
-        // pixels.setPixelColor(i, foregroundColor2);
-        currentColor += foregroundColor2;
-      }
-      if (currentColor == 0) { // If the pixel currently has no color, that means it's a background pixel
-        //  pixels.setPixelColor(i, backgroundColor);
-        currentColor = backgroundColor;
-      }
-      pixels.setPixelColor(i, currentColor);
-    }
-    currentLocation += locationMovement;
-    if (currentLocation == pixels - movingPixels) // When you reach the ends of the strip, reverse the direction and go again
-      locationMovement = locationMovement * -1;
-    pixels.show();
-  }
-}
-*/
-
 void two_colors_helper(Adafruit_NeoPixel &p, uint32_t foregroundColor1, uint32_t foregroundColor2, uint32_t backgroundColor, int length1, int length2, unsigned long counter) {
   const size_t pixels = p.numPixels();
   int least_length = length1 < length2 ? length1 : length2;
@@ -143,10 +113,10 @@ void two_colors_helper(Adafruit_NeoPixel &p, uint32_t foregroundColor1, uint32_t
 
     // first line of pixels
     if (i < length1 + stage and i > stage)
-      currentColor += foregroundColor1;
+      currentColor = foregroundColor1;
     
     if (i + stage > pixels - length2 and i < pixels - stage)
-      currentColor += foregroundColor2;
+      currentColor = foregroundColor2;
 
     if (currentColor == 0) {
       // if currentColor is zero, then it has no color and is meant to be a background pixel.
@@ -168,4 +138,41 @@ void two_colors(Adafruit_NeoPixel &p, uint32_t foregroundColor1, uint32_t foregr
     two_colors_helper(p, foregroundColor1, foregroundColor2, backgroundColor, length1, length2, counter);
   else
     two_colors_helper(p, foregroundColor2, foregroundColor1, backgroundColor, length2, length1, counter);
+}
+
+void fade(Adafruit_NeoPixel &p, uint32_t foregroundColor1, double delta, double start_brightness, double end_brightness, unsigned long counter) {
+  double brightness_difference = end_brightness - start_brightness;
+  unsigned long stage_count = abs(brightness_difference / delta);
+
+  unsigned long stage = counter % stage_count;
+
+  double r = unpack_red(foregroundColor1);
+  double g = unpack_green(foregroundColor1);
+  double b = unpack_blue(foregroundColor1);
+
+  double brightness = start_brightness;
+  brightness = brightness + (delta * (stage + 1));
+
+  r *= brightness;
+  g *= brightness;
+  b *= brightness;
+
+  uint32_t dimmed_color = p.Color(r, g, b);
+
+  p.fill(dimmed_color);
+  p.show();
+}
+
+void fade_in_and_out(Adafruit_NeoPixel &p, uint32_t foreground_color, double delta, unsigned long counter) {
+  unsigned long stage_half = 1 / delta;
+  unsigned long stage_count = 2 * stage_half;
+  
+  unsigned long stage = counter % stage_count;
+
+  if (stage < stage_half) {
+    fade(p, foreground_color, delta, 0, 1, counter);
+  } else {
+    fade(p, foreground_color, -delta, 1, 0, counter);
+  }
+
 }
