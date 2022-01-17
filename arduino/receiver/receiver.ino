@@ -93,20 +93,8 @@ void loop() {
       last_pattern_time = millis();
     }
 
-   // singleColor(mainColor);
-
     // Check if new colors are in the serial buffer
     if (pyTransfer.available()) {
-
-      /*
-      if (pyTransfer.bytesRead >= 4) {
-        currentColorArray[0] = pyTransfer.packet.txBuff[0];
-        currentColorArray[1] = pyTransfer.packet.txBuff[1];
-        currentColorArray[2] = pyTransfer.packet.txBuff[2];
-      
-        currentPattern = pyTransfer.packet.txBuff[3];
-      }
-      */
 
       uint32_t temp = 0;
       

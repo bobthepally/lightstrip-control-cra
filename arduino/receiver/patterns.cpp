@@ -32,23 +32,6 @@ void moving_color(Adafruit_NeoPixel &p, uint32_t foreground_color, uint32_t back
     p.show();
 }
 
-void evenSpacedDots(Adafruit_NeoPixel &p, uint32_t foregroundColor, uint32_t backgroundColor, int dotNum, int dotLength, unsigned long timeInterval) {
-    
-    const uint16_t count = p.numPixels();
-    int dotInterval = count / dotNum;
-    
-    for (int j = 0; j < dotInterval; j++) {
-        for (int i = 0; i < count; i++) {
-            if ((i + j) % dotInterval < dotLength)
-                p.setPixelColor(i, foregroundColor);
-            else
-                p.setPixelColor(i, backgroundColor);
-        }
-        p.show();
-        delay(timeInterval);
-    }
-}
-
 void backfill(Adafruit_NeoPixel &p, uint32_t foregroundColor, uint32_t backgroundColor) {
   const size_t count = p.numPixels();
   
