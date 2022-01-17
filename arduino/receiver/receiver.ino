@@ -72,6 +72,7 @@ void loop() {
         break;
       case 1:
         moving_color(pixels, mainColor, 0, 10, pattern_counter);
+        //even_spaced_dots(pixels, mainColor, 0, 20, 1, pattern_counter);
         break;
       case 2:
         fade_in_and_out(pixels, mainColor, 0.02, pattern_counter);

@@ -193,3 +193,18 @@ void blended_color_cycle(Adafruit_NeoPixel &p, uint32_t colors[], size_t color_c
   
   blending_colors(p, colors[color1_index], colors[color2_index], color_stages, counter);
 }
+
+void even_spaced_dots(Adafruit_NeoPixel &p, uint32_t foreground_color, uint32_t background_color, unsigned long dot_count, unsigned long dot_length, unsigned long counter) {
+  const size_t pixels = p.numPixels();
+
+  unsigned long stage_count = pixels / dot_count;
+  unsigned long stage = counter % stage_count;
+
+for (int i = 0; i < pixels; i++) {
+  if ((i + stage) % stage_count < dot_length)
+    p.setPixelColor(i, foreground_color);
+  else
+    p.setPixelColor(i, background_color);
+  }
+  p.show();
+}
