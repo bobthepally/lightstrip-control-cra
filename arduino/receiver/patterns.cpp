@@ -155,3 +155,41 @@ void two_color_fade_in_and_out(Adafruit_NeoPixel &p, uint32_t color1, uint32_t c
     fade_in_and_out(p, color2, delta, counter);
   }
 }
+
+void blending_colors(Adafruit_NeoPixel &p, uint32_t color1, uint32_t color2, int total_stages, unsigned long counter) {
+  
+  unsigned long stage = counter % total_stages;
+
+  double color1_r = unpack_red(color1);
+  double color1_g = unpack_green(color1);
+  double color1_b = unpack_blue(color1);
+
+  double color2_r = unpack_red(color2);
+  double color2_g = unpack_green(color2);
+  double color2_b = unpack_blue(color2);
+
+  double r_delta = (color2_r - color1_r) / total_stages;
+  double g_delta = (color2_g - color1_g) / total_stages;
+  double b_delta = (color2_b - color1_b) / total_stages;
+
+  double blended_red = color1_r + (r_delta * stage);
+  double blended_green = color1_g + (g_delta * stage);
+  double blended_blue = color1_b + (b_delta * stage);
+
+  uint32_t blended_color = p.Color(blended_red, blended_green, blended_blue);
+
+  p.fill(blended_color);
+  p.show();
+
+}
+
+void blended_color_cycle(Adafruit_NeoPixel &p, uint32_t colors[], size_t color_count, size_t color_stages, unsigned long counter) {
+  
+  unsigned long total_stages = (color_count - 1) * color_stages;
+  unsigned long stage = counter % total_stages;
+
+  size_t color1_index = stage / color_stages;
+  size_t color2_index = color1_index + 1;
+  
+  blending_colors(p, colors[color1_index], colors[color2_index], color_stages, counter);
+}
