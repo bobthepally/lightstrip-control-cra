@@ -189,7 +189,7 @@ class LightstripMain extends Component {
                         </Grid>
 
                         <Grid item> 
-                            <ColorCircle />
+                            <ColorCircle onChange={this.handleColorChange} />
                         </Grid>
 
                         <Grid item>
