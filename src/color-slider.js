@@ -16,6 +16,10 @@ class ColorSlider extends Component {
         this.handleBrightnessChange = this.handleBrightnessChange.bind(this);
     }
 
+    static defaultProps = {
+        showHueSlider: true,
+    }
+
     handleColorChange(color) {
 
         color.v = 1;
@@ -56,12 +60,22 @@ class ColorSlider extends Component {
             a: colorHSV.v
         };
 
+        let hueSlider;
+        if (this.props.showHueSlider) {
+            hueSlider = (
+                <Grid item>
+                    <HuePicker onChange={this.handleColorChange} color={colorValue} />
+                </Grid>
+                )
+        } else {
+            hueSlider = null;
+        }
+
         return (
             <div className="colorslider">
                 <Grid container spacing={1} alignItems="flex-start" direction="column">
-                    <Grid item>
-                        <HuePicker onChange={this.handleColorChange} color={colorValue} />
-                    </Grid>
+                    
+                    {hueSlider}
 
                     <Grid item>
                         <AlphaPicker onChange={this.handleBrightnessChange} color={brightness} />
@@ -71,7 +85,6 @@ class ColorSlider extends Component {
             </div>
         );
     }
-
 }
 
 export default ColorSlider;
