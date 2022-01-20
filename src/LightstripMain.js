@@ -11,9 +11,14 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 // import FormLabel from '@material-ui/core/FormLabel';
 
+// Pre-built color circle
+import CircularColor from 'react-circular-color';
+
 // Custom color slider component
 import ColorSlider from './color-slider';
-import ColorCircle from './color-circle';
+//import ColorCircle from './color-circle';
+
+var tinycolor = require('tinycolor2');
 
 // TODO: figure out how css is properly done in a react app
 const colorPalette = {
@@ -68,9 +73,11 @@ class LightstripMain extends Component {
 
     handleColorChange(p_color) {
 
+        let rgb = tinycolor(p_color).toRgb();
+
         this.setState((prevState, props) => {
             return {
-                color: p_color,
+                color: rgb,
                 pattern: prevState.pattern
             }
         });
@@ -184,12 +191,13 @@ class LightstripMain extends Component {
                 }}>
                 
                     <Grid container spacing={1} alignItems="flex-start" direction="column">
+
                         <Grid item> 
-                            <ColorSlider onChange={this.handleColorChange} color={colorValue} />
+                            <CircularColor size={320} onChange={this.handleColorChange} numberOfSectors={360} />
                         </Grid>
 
                         <Grid item> 
-                            <ColorCircle onChange={this.handleColorChange} />
+                            <ColorSlider onChange={this.handleColorChange} color={colorValue} showHueSlider={false} />
                         </Grid>
 
                         <Grid item>
