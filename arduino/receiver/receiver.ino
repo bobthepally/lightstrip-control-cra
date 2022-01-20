@@ -78,7 +78,7 @@ void loop() {
         fade_in_and_out(pixels, mainColor, 0.02, pattern_counter);
         break;
       case 3: // rainbow
-        blended_color_cycle(pixels, rainbow, 7, 80, pattern_counter);
+        blended_color_cycle(pixels, rainbow, 7, 160, pattern_counter);
         break;
       case 4: // beat-saber
         // two_colors(pixels, pixels.Color(255,0,0), pixels.Color(0,0,255), 0, 60, 60, pattern_counter);
