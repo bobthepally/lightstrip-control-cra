@@ -88,6 +88,7 @@ void loop() {
         break;
       case 5: // karaoke
         random_blips(pixels, rainbow, 7, 10, pattern_counter);
+        break;
       default:
         singleColor(0);
       }
