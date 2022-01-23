@@ -255,6 +255,7 @@ class LightstripMain extends Component {
                                     <FormControlLabel value={2} control={<Radio style={radioStyle} />} label="Fade" />
                                     <FormControlLabel value={3} control={<Radio style={radioStyle} />} label="Rainbow" />
                                     <FormControlLabel value={4} control={<Radio style={radioStyle} />} label="Beat-Saber" />
+                                    <FormControlLabel value={5} control={<Radio style={radioStyle} />} label="Karaoke" />
                                 </RadioGroup>
                             </FormControl>
                         </Grid>
