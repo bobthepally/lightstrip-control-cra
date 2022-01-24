@@ -32,23 +32,6 @@ void moving_color(Adafruit_NeoPixel &p, uint32_t foreground_color, uint32_t back
     p.show();
 }
 
-void evenSpacedDots(Adafruit_NeoPixel &p, uint32_t foregroundColor, uint32_t backgroundColor, int dotNum, int dotLength, unsigned long timeInterval) {
-    
-    const uint16_t count = p.numPixels();
-    int dotInterval = count / dotNum;
-    
-    for (int j = 0; j < dotInterval; j++) {
-        for (int i = 0; i < count; i++) {
-            if ((i + j) % dotInterval < dotLength)
-                p.setPixelColor(i, foregroundColor);
-            else
-                p.setPixelColor(i, backgroundColor);
-        }
-        p.show();
-        delay(timeInterval);
-    }
-}
-
 void backfill(Adafruit_NeoPixel &p, uint32_t foregroundColor, uint32_t backgroundColor) {
   const size_t count = p.numPixels();
   
@@ -192,4 +175,60 @@ void blended_color_cycle(Adafruit_NeoPixel &p, uint32_t colors[], size_t color_c
   size_t color2_index = color1_index + 1;
   
   blending_colors(p, colors[color1_index], colors[color2_index], color_stages, counter);
+}
+
+void even_spaced_dots(Adafruit_NeoPixel &p, uint32_t foreground_color, uint32_t background_color, unsigned long dot_count, unsigned long dot_length, unsigned long counter) {
+  const size_t pixels = p.numPixels();
+
+  unsigned long stage_count = pixels / dot_count;
+  unsigned long stage = counter % stage_count;
+
+for (int i = 0; i < pixels; i++) {
+  if ((i + stage) % stage_count < dot_length)
+    p.setPixelColor(i, foreground_color);
+  else
+    p.setPixelColor(i, background_color);
+  }
+  p.show();
+}
+
+
+void rainbow_blend(Adafruit_NeoPixel &p, uint32_t colors[], size_t color_count, unsigned long counter) {
+  const size_t pixels = p.numPixels();
+  const size_t pixels_per_color = pixels / color_count;
+  const unsigned long stage = counter % pixels;
+
+  for (size_t color_index = 0; color_index < color_count - 1; color_index++) {
+    double color1_r = unpack_red(colors[color_index]);
+    double color1_g = unpack_green(colors[color_index]);
+    double color1_b = unpack_blue(colors[color_index]);
+
+    double color2_r = unpack_red(colors[color_index+1]);
+    double color2_g = unpack_green(colors[color_index+1]);
+    double color2_b = unpack_blue(colors[color_index+1]);
+
+    double r_delta = (color2_r - color1_r) / (double) pixels_per_color;
+    double g_delta = (color2_g - color1_g) / (double) pixels_per_color;
+    double b_delta = (color2_b - color1_b) / (double) pixels_per_color;
+  
+    for (size_t i = 0; i < pixels_per_color; i++) {
+      uint32_t pixel_color = p.Color(color1_r + (r_delta * i), color1_g + (g_delta * i), color1_b + (b_delta * i));
+      
+      size_t pixel_index = (i + (color_index * pixels_per_color) + stage) % pixels;
+      p.setPixelColor(pixel_index, pixel_color);
+    }
+  }
+
+  p.show();
+}
+
+void random_blips(Adafruit_NeoPixel &p, uint32_t colors[], size_t color_count, size_t number_of_blips, unsigned long counter) {
+  size_t number_of_pixels = p.numPixels();
+
+  for (size_t i = 0; i < number_of_blips; i++) {
+    size_t pixel = random(0, number_of_pixels);
+    size_t color_index = random(0, color_count);
+    p.setPixelColor(pixel, colors[color_index]);
+  }
+  p.show();
 }

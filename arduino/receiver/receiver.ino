@@ -77,12 +77,16 @@ void loop() {
         fade_in_and_out(pixels, mainColor, 0.02, pattern_counter);
         break;
       case 3: // rainbow
-        blended_color_cycle(pixels, rainbow, 7, 80, pattern_counter);
+        // blended_color_cycle(pixels, rainbow, 7, 160, pattern_counter);
+        rainbow_blend(pixels, rainbow, 7, pattern_counter);
         break;
       case 4: // beat-saber
         // two_colors(pixels, pixels.Color(255,0,0), pixels.Color(0,0,255), 0, 60, 60, pattern_counter);
         two_color_fade_in_and_out(pixels, pixels.Color(200,0,0), pixels.Color(0,40,255), 0.02, pattern_counter);
         // blending_colors(pixels, pixels.Color(255,0,0), pixels.Color(0,0,255), 80, pattern_counter);
+        break;
+      case 5: // karaoke
+        random_blips(pixels, rainbow, 7, 10, pattern_counter);
         break;
       default:
         singleColor(0);
@@ -92,20 +96,8 @@ void loop() {
       last_pattern_time = millis();
     }
 
-   // singleColor(mainColor);
-
     // Check if new colors are in the serial buffer
     if (pyTransfer.available()) {
-
-      /*
-      if (pyTransfer.bytesRead >= 4) {
-        currentColorArray[0] = pyTransfer.packet.txBuff[0];
-        currentColorArray[1] = pyTransfer.packet.txBuff[1];
-        currentColorArray[2] = pyTransfer.packet.txBuff[2];
-      
-        currentPattern = pyTransfer.packet.txBuff[3];
-      }
-      */
 
       uint32_t temp = 0;
       
