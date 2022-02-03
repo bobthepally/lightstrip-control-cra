@@ -16,7 +16,9 @@ import CircularColor from 'react-circular-color';
 
 // Custom color slider component
 import ColorSlider from './color-slider';
-//import ColorCircle from './color-circle';
+
+// Custom color palette component
+import ColorPalette from './color-palette.js'
 
 var tinycolor = require('tinycolor2');
 
@@ -244,6 +246,10 @@ class LightstripMain extends Component {
                                     />
                                 </Grid>
                             </Grid>
+                        </Grid>
+
+                        <Grid item>
+                            <ColorPalette color={colorValue} />
                         </Grid>
 
                         <Grid item>
