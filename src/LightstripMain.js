@@ -77,27 +77,22 @@ class LightstripMain extends Component {
 
         let rgb = tinycolor(p_color).toRgb();
 
-        this.setState((prevState, props) => {
-            return {
-                color: rgb,
-                pattern: prevState.pattern
-            }
+        this.setState((prevState) => {
+            prevState.color = rgb;
+            return prevState;
         });
         // console.log("r: " + color.rgb.r);
 
-        //this.setState(color.rgb);
     }
 
     handlePatternChange(event) {
-        event.persist();
+        let p_pattern = parseInt(event.target.value);
 
-        this.setState((prevState, props) => {
-            let p_pattern = parseInt(event.target.value);
-
-            return {
-                color: prevState.color,
-                pattern: p_pattern
-            }
+        // note that setState is async, so the event is garbage collected by the time it's called. 
+        // this is why the parseInt function happens outside setState
+        this.setState((prevState) => {
+            prevState.pattern = p_pattern;
+            return prevState;
         });
     }
 
@@ -116,11 +111,9 @@ class LightstripMain extends Component {
         else if (color === "blue")
             newColor.b = newValue;
 
-        this.setState((prevState, props) => {
-            return {
-                color: newColor,
-                pattern: prevState.pattern
-            }
+        this.setState((prevState) => {
+            prevState.color = newColor;
+            return prevState;
         });
     }
 
