@@ -183,6 +183,9 @@ class LightstripMain extends Component {
     render() {
         const colorValue = this.state.color
         const pattern = this.state.pattern;
+        const hexValue = tinycolor(colorValue).toHexString();
+
+        console.log(hexValue);
 
         return (
             <div>
@@ -195,7 +198,7 @@ class LightstripMain extends Component {
                     <Grid container spacing={1} alignItems="flex-start" direction="column">
 
                         <Grid item> 
-                            <CircularColor size={320} onChange={this.handleColorChange} numberOfSectors={360} />
+                            <CircularColor size={320} onChange={this.handleColorChange} numberOfSectors={360} color={hexValue} />
                         </Grid>
 
                         <Grid item> 
@@ -249,7 +252,7 @@ class LightstripMain extends Component {
                         </Grid>
 
                         <Grid item>
-                            <ColorPalette color={colorValue} />
+                            <ColorPalette color={colorValue} onChange={this.handleColorChange} />
                         </Grid>
 
                         <Grid item>
