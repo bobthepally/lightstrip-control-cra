@@ -112,7 +112,7 @@ class LightstripMain extends Component {
 
     handleSelectedChange(index) {
 
-        let newSelectedColor = tinycolor(this.state.palette.colors[index]).toRgb();
+        let newSelectedColor = tinycolor(this.state.palette.colors[index].value).toRgb();
 
         this.setState((prevState) => {
             prevState.palette.selectedColor = index;
