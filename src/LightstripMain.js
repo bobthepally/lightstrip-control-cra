@@ -11,6 +11,8 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 // import FormLabel from '@material-ui/core/FormLabel';
 
+import { v4 as uuidv4 } from 'uuid';
+
 // Pre-built color circle
 import CircularColor from 'react-circular-color';
 
@@ -59,18 +61,28 @@ class LightstripMain extends Component {
     constructor(props) {
         super(props);
 
+        let startingColor = {
+            r: 0,
+            g: 0, 
+            b: 0
+        };
+    
+        // attaches a unique uuid key to each color, for use in a list later
+        let startingColorPalette = [startingColor, "green", "blue"].map(c => { return { id: uuidv4(), value: c };});
+
         this.state = {
-            color: {
-                r: 0,
-                g: 0,
-                b: 0
-            },
+            color: startingColor,
             pattern: 0,
+            palette: {
+                colors: startingColorPalette, 
+                selectedColor: 0
+            }
         }
 
         this.handlePatternChange = this.handlePatternChange.bind(this);
         this.handleColorChange = this.handleColorChange.bind(this);
         this.sendLightstripColor = this.sendLightstripColor.bind(this);
+        this.handleSelectedChange = this.handleSelectedChange.bind(this);
     }
 
     handleColorChange(p_color) {
@@ -78,7 +90,9 @@ class LightstripMain extends Component {
         let rgb = tinycolor(p_color).toRgb();
 
         this.setState((prevState) => {
+            let index = prevState.palette.selectedColor;
             prevState.color = rgb;
+            prevState.palette.colors[index].value = rgb;
             return prevState;
         });
         // console.log("r: " + color.rgb.r);
@@ -92,6 +106,17 @@ class LightstripMain extends Component {
         // this is why the parseInt function happens outside setState
         this.setState((prevState) => {
             prevState.pattern = p_pattern;
+            return prevState;
+        });
+    }
+
+    handleSelectedChange(index) {
+
+        let newSelectedColor = tinycolor(this.state.palette.colors[index]).toRgb();
+
+        this.setState((prevState) => {
+            prevState.palette.selectedColor = index;
+            prevState.color = newSelectedColor;
             return prevState;
         });
     }
@@ -170,7 +195,6 @@ class LightstripMain extends Component {
             .catch(error => {
                 console.error('Error sending colors to server', error);
             });
-
     }
 
     render() {
@@ -178,7 +202,7 @@ class LightstripMain extends Component {
         const pattern = this.state.pattern;
         const hexValue = tinycolor(colorValue).toHexString();
 
-        console.log(hexValue);
+        // console.log(hexValue);
 
         return (
             <div>
@@ -245,7 +269,7 @@ class LightstripMain extends Component {
                         </Grid>
 
                         <Grid item>
-                            <ColorPalette color={colorValue} onChange={this.handleColorChange} />
+                            <ColorPalette colors={this.state.palette.colors} selectedColor={this.state.palette.selectedColor} onChange={this.handleSelectedChange} />
                         </Grid>
 
                         <Grid item>

@@ -6,31 +6,17 @@ class ColorPalette extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            colors: ["red", "green", "blue"],
-            selectedColor: 0
-        }
-
         this.handleSelectedChange = this.handleSelectedChange.bind(this);
     }
 
     handleSelectedChange(index) {
-        this.setState({
-            colors: this.state.colors,
-            selectedColor: index
-        });
-
-        this.props.onChange(this.state.colors[index]);
+        this.props.onChange(index);
     }
 
     render() {
 
-        // TODO: do this outside the render function somehow
-        // let currentColor = this.props.color;
-        // this.state.colors[this.state.selectedColor] = currentColor;
+        let colorSquares = this.props.colors.map( (c, i) => <ColorSquare color={c.value} index={i} border={i === this.props.selectedColor} onClick={this.handleSelectedChange} key={c.id} />);
         
-        let colorSquares = this.state.colors.map( (c, i) => <ColorSquare color={c} index={i} border={i === this.state.selectedColor} onClick={this.handleSelectedChange} />);
-
         return (
             <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", gap: "10px" }} >
                 { colorSquares }
