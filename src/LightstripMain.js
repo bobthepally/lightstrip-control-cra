@@ -68,7 +68,7 @@ class LightstripMain extends Component {
         };
     
         // attaches a unique uuid key to each color, for use in a list later
-        let startingColorPalette = [startingColor, "green", "blue"].map(c => { return { id: uuidv4(), value: c };});
+        let startingColorPalette = [startingColor].map(c => { return { id: uuidv4(), value: c };});
 
         this.state = {
             color: startingColor,
@@ -83,6 +83,7 @@ class LightstripMain extends Component {
         this.handleColorChange = this.handleColorChange.bind(this);
         this.sendLightstripColor = this.sendLightstripColor.bind(this);
         this.handleSelectedChange = this.handleSelectedChange.bind(this);
+        this.handlePaletteQuantityChange = this.handlePaletteQuantityChange.bind(this);
     }
 
     handleColorChange(p_color) {
@@ -140,6 +141,39 @@ class LightstripMain extends Component {
             prevState.color = newColor;
             return prevState;
         });
+    }
+
+    handlePaletteQuantityChange(operation) {
+        
+        let newPalette = this.state.palette;
+        if (operation === "add") {
+            let newColor = {
+                id: uuidv4(),
+                value: {r: 0, g: 0, b: 0}
+            }
+
+            newPalette.colors.splice(this.state.palette.selectedColor + 1, 0, newColor);
+        } else if (operation === "remove") {            
+            // make sure there's at least one color remaining
+            if (newPalette.colors.length <= 1)
+                return
+
+            newPalette.colors.splice(this.state.palette.selectedColor, 1);
+
+            // decrement the selectedColor counter, but *not* below zero
+            if (newPalette.selectedColor > 0)
+                newPalette.selectedColor--;
+
+        } else {
+            console.error("Error: invalid palette operation");
+            return;
+        }
+
+        this.setState((prevState) => {
+            prevState.palette = newPalette;
+            return prevState;
+        });
+
     }
 
     getRGBString(r, g, b) {
@@ -269,7 +303,7 @@ class LightstripMain extends Component {
                         </Grid>
 
                         <Grid item>
-                            <ColorPalette colors={this.state.palette.colors} selectedColor={this.state.palette.selectedColor} onChange={this.handleSelectedChange} />
+                            <ColorPalette colors={this.state.palette.colors} selectedColor={this.state.palette.selectedColor} onChange={this.handleSelectedChange} onPaletteChange={this.handlePaletteQuantityChange} />
                         </Grid>
 
                         <Grid item>
