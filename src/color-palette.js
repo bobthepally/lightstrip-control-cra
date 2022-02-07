@@ -44,19 +44,11 @@ class ColorPalette extends Component {
         return (
             <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", gap: "10px", alignItems: "center" }} >
 
-                <Button variant="constrained" color="inherit" style={buttonStyle} onClick={() => { this.handlePaletteChange("remove") }} >-</Button>
+                <Button variant="contained" color="inherit" style={buttonStyle} onClick={() => { this.handlePaletteChange("remove") }} >-</Button>
 
                 { colorSquares }
             
-                <Button variant="constrained" color="inherit" style={buttonStyle} onClick={() => { this.handlePaletteChange("add") }} >+</Button>
-
-                {/*
-                <svg width="25" height="25">
-                    <rect width="25" height="25" rx="5" fill="lightblue" strokeWidth="3" stroke="black" />
-                    <rect width="20" height="5" x="2.5" y="10" fill="black" />
-                    <rect width="5" height="20" x="10" y="2.5" fill="black" />
-                </svg>
-                */}
+                <Button variant="contained" color="inherit" style={buttonStyle} onClick={() => { this.handlePaletteChange("add") }} >+</Button>
             
             </div>
         );
