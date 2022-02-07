@@ -137,10 +137,7 @@ class LightstripMain extends Component {
         else if (color === "blue")
             newColor.b = newValue;
 
-        this.setState((prevState) => {
-            prevState.color = newColor;
-            return prevState;
-        });
+        this.handleColorChange(newColor);
     }
 
     handlePaletteQuantityChange(operation) {
@@ -153,6 +150,10 @@ class LightstripMain extends Component {
             }
 
             newPalette.colors.splice(this.state.palette.selectedColor + 1, 0, newColor);
+            
+            // switch the currently selected palette to the new one
+            newPalette.selectedColor++;
+
         } else if (operation === "remove") {            
             // make sure there's at least one color remaining
             if (newPalette.colors.length <= 1)
@@ -171,6 +172,7 @@ class LightstripMain extends Component {
 
         this.setState((prevState) => {
             prevState.palette = newPalette;
+            prevState.color = tinycolor(newPalette.colors[newPalette.selectedColor].value).toRgb(); // this just does what handleSelectedChange() does but oh well.
             return prevState;
         });
 
