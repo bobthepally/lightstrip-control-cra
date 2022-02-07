@@ -25,13 +25,21 @@ class ArduinoController:
             print(e)
             exit()
 
-    def send_colors(self, red, green, blue, pattern=0):
+    def send_colors(self, colors, pattern=0):
         
         # print(f"sending colors rgb({red},{green},{blue})")
 
         array_size = 0
 
-        color_array = [int(red), int(green), int(blue), int(pattern)]
+        color_array = []
+        for c in colors:
+            color_array.append(c[0])
+            color_array.append(c[1])
+            color_array.append(c[2])
+
+        color_array.append(pattern)
+
+        # color_array = [int(red), int(green), int(blue), int(pattern)]
         array_size += self.link.tx_obj(color_array)
 
         print(array_size)
