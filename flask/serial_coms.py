@@ -31,7 +31,9 @@ class ArduinoController:
 
         array_size = 0
 
-        color_array = []
+        color_count = len(colors)
+
+        color_array = [color_count]
         for c in colors:
             color_array.append(c[0])
             color_array.append(c[1])
