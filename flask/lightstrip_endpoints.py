@@ -26,17 +26,6 @@ def post_color_set():
 
     # Data validation section
     try:
-        """
-        current_key = 'red'
-        int_red = int(red)
-
-        current_key = 'green'
-        int_green = int(green)
-
-        current_key = 'blue'
-        int_blue = int(blue)
-        """
-
         # current_key = 'pattern'
         int_pattern = int(pattern)
 
@@ -50,7 +39,7 @@ def post_color_set():
         return Response(msg, status=400, mimetype="text/plain")
 
     # Make call to the lightstrip API
-    strip.set_color(color_tuples, pattern)
+    strip.set_color(color_tuples, int_pattern)
 
     return ("Successfully set the lightstrip colors", 200)
 
