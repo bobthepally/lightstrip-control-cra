@@ -44,7 +44,7 @@ class ArduinoController:
         # color_array = [int(red), int(green), int(blue), int(pattern)]
         array_size += self.link.tx_obj(color_array)
 
-        print(array_size)
+        print(color_array)
 
         lightstripSerialLock = NamedAtomicLock("lightstripSerialLock")
 
