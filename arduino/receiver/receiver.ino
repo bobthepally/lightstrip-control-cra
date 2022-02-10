@@ -67,7 +67,7 @@ void setup() {
 
 void loop() {
 
-    uint32_t mainColor = current_colors[0]; //pixels.Color(currentColorArray[0], currentColorArray[1], currentColorArray[2]);
+    uint32_t mainColor = current_colors[selected_color]; //pixels.Color(currentColorArray[0], currentColorArray[1], currentColorArray[2]);
 
     if (millis() >= last_pattern_time + interval) {
 

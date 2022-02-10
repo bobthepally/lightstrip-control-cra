@@ -11,7 +11,7 @@ except NotImplementedError:
     DEFAULT_PIN = None
 
 # Set this to true if you're using an arduino to control the lights
-ARDUINO = False
+ARDUINO = True
 
 # Amps per subpixel
 PIXEL_AMPS = 0.02
