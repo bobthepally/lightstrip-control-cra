@@ -168,11 +168,11 @@ void blending_colors(Adafruit_NeoPixel &p, uint32_t color1, uint32_t color2, int
 
 void blended_color_cycle(Adafruit_NeoPixel &p, uint32_t colors[], size_t color_count, size_t color_stages, unsigned long counter) {
   
-  unsigned long total_stages = (color_count - 1) * color_stages;
+  unsigned long total_stages = color_count * color_stages;
   unsigned long stage = counter % total_stages;
 
   size_t color1_index = stage / color_stages;
-  size_t color2_index = color1_index + 1;
+  size_t color2_index = (color1_index + 1) % color_count; // the modulo completes the loop and makes the last color blend back to the first color
   
   blending_colors(p, colors[color1_index], colors[color2_index], color_stages, counter);
 }
@@ -193,7 +193,7 @@ for (int i = 0; i < pixels; i++) {
 }
 
 
-void rainbow_blend(Adafruit_NeoPixel &p, uint32_t colors[], size_t color_count, unsigned long counter) {
+void rainbow_cycle(Adafruit_NeoPixel &p, uint32_t colors[], size_t color_count, unsigned long counter) {
   const size_t pixels = p.numPixels();
   const size_t pixels_per_color = pixels / color_count;
   const unsigned long stage = counter % pixels;

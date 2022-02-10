@@ -12,7 +12,7 @@ void two_color_fade_in_and_out(Adafruit_NeoPixel &p, uint32_t color1, uint32_t c
 void blending_colors(Adafruit_NeoPixel &p, uint32_t color1, uint32_t color2, int total_stages, unsigned long counter);
 void blended_color_cycle(Adafruit_NeoPixel &p, uint32_t colors[], size_t color_count, size_t color_stages, unsigned long counter);
 void even_spaced_dots(Adafruit_NeoPixel &p, uint32_t foreground_color, uint32_t background_color, unsigned long dot_count, unsigned long dot_length, unsigned long counter);
-void rainbow_blend(Adafruit_NeoPixel &p, uint32_t colors[], size_t color_count, unsigned long counter);
+void rainbow_cycle(Adafruit_NeoPixel &p, uint32_t colors[], size_t color_count, unsigned long counter);
 void random_blips(Adafruit_NeoPixel &p, uint32_t colors[], size_t color_count, size_t number_of_blips, unsigned long counter);
 
 // for debugging
