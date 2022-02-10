@@ -221,6 +221,20 @@ void rainbow_cycle_blend(Adafruit_NeoPixel &p, uint32_t colors[], size_t color_c
   p.show();
 }
 
+void rainbow_cycle(Adafruit_NeoPixel &p, uint32_t colors[], size_t color_count, unsigned long counter) {
+  const size_t pixels = p.numPixels();
+  const size_t pixels_per_color = pixels / color_count;
+  const unsigned long stage = counter % pixels;
+
+  for (size_t color_index = 0; color_index < color_count; color_index++) {
+    for (size_t i = 0; i < pixels_per_color; i++) {
+      size_t pixel_index = (i + (color_index * pixels_per_color) + stage) % pixels;
+      p.setPixelColor(pixel_index, colors[color_index]);
+    }
+  }
+  p.show();
+}
+
 void random_blips(Adafruit_NeoPixel &p, uint32_t colors[], size_t color_count, size_t number_of_blips, unsigned long counter) {
   size_t number_of_pixels = p.numPixels();
 

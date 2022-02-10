@@ -316,8 +316,8 @@ class LightstripMain extends Component {
                                 {/*<FormLabel component="legend">Pattern</FormLabel>*/}
                                 <RadioGroup aria-label="pattern" value={pattern} onChange={this.handlePatternChange} style={radioButtonStyle}>
                                     <FormControlLabel value={0} control={<Radio style={radioStyle} />} label="Solid"        />
-                                    <FormControlLabel value={1} control={<Radio style={radioStyle} />} label="Dots"         />
-                                    <FormControlLabel value={2} control={<Radio style={radioStyle} />} label="Fade"         />
+                                    <FormControlLabel value={1} control={<Radio style={radioStyle} />} label="Fade"         />
+                                    <FormControlLabel value={2} control={<Radio style={radioStyle} />} label="Cycle"         />
                                     <FormControlLabel value={3} control={<Radio style={radioStyle} />} label="Rainbow"      />
                                     <FormControlLabel value={4} control={<Radio style={radioStyle} />} label="Beat-Saber"   />
                                     <FormControlLabel value={5} control={<Radio style={radioStyle} />} label="Karaoke"      />

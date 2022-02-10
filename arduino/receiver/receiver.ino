@@ -75,15 +75,13 @@ void loop() {
       case 0:
         singleColor(mainColor);
         break;
-      case 1:
-        moving_color(pixels, mainColor, 0, 10, pattern_counter);
-        break;
-      case 2:
-        // fade_in_and_out(pixels, mainColor, 0.02, pattern_counter);
+      case 1: // blend
         blended_color_cycle(pixels, current_colors, color_count, 80, pattern_counter);
         break;
+      case 2: // cycle
+        rainbow_cycle(pixels, current_colors, color_count, pattern_counter);
+        break;
       case 3: // rainbow
-        // blended_color_cycle(pixels, rainbow, 7, 160, pattern_counter);
         rainbow_cycle_blend(pixels, rainbow, 7, pattern_counter);
         break;
       case 4: // beat-saber
