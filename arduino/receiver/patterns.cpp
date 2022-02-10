@@ -192,8 +192,7 @@ for (int i = 0; i < pixels; i++) {
   p.show();
 }
 
-
-void rainbow_cycle(Adafruit_NeoPixel &p, uint32_t colors[], size_t color_count, unsigned long counter) {
+void rainbow_cycle_blend(Adafruit_NeoPixel &p, uint32_t colors[], size_t color_count, unsigned long counter) {
   const size_t pixels = p.numPixels();
   const size_t pixels_per_color = pixels / color_count;
   const unsigned long stage = counter % pixels;
