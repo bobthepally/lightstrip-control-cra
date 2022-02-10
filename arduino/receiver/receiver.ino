@@ -81,13 +81,16 @@ void loop() {
       case 2: // cycle
         rainbow_cycle(pixels, current_colors, color_count, pattern_counter);
         break;
-      case 3: // rainbow
+      case 3: // random
+        random_blips(pixels, current_colors, color_count, 10, pattern_counter);
+        break;
+      case 4: // rainbow
         rainbow_cycle_blend(pixels, rainbow, 7, pattern_counter);
         break;
-      case 4: // beat-saber
+      case 5: // beat-saber
         two_color_fade_in_and_out(pixels, pixels.Color(200,0,0), pixels.Color(0,40,255), 0.02, pattern_counter);
         break;
-      case 5: // karaoke
+      case 6: // karaoke
         random_blips(pixels, rainbow, 7, 10, pattern_counter);
         break;
       default:
