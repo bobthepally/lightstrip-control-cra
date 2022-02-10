@@ -42,7 +42,7 @@ class ArduinoController:
         color_array.append(selected_color)
         color_array.append(pattern)
 
-        print(str(color_array))
+        # print(str(color_array))
 
         # color_array = [int(red), int(green), int(blue), int(pattern)]
         array_size += self.link.tx_obj(color_array)

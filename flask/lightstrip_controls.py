@@ -11,7 +11,7 @@ except NotImplementedError:
     DEFAULT_PIN = None
 
 # Set this to true if you're using an arduino to control the lights
-ARDUINO = True
+ARDUINO = False
 
 # Amps per subpixel
 PIXEL_AMPS = 0.02
@@ -54,10 +54,10 @@ class Lightstrip:
         # If the 'arduino' variable is set, this sends the data over the com port
         # instead of directly via GPIO pins
         if self.arduino:
-            self.controller.send_colors(colors, selected_color=0, pattern)
+            self.controller.send_colors(colors, selected_color, pattern)
 
         else:
-            print(colors)
+            print(str(colors) + f" selected_color: {str(selected_color)}, pattern: {str(pattern)}")
 
 if __name__ == "__main__":
     
