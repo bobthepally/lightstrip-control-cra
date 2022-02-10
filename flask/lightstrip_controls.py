@@ -27,34 +27,38 @@ class Lightstrip:
 
         if self.arduino:
             self.controller = ArduinoController()
-            
-        else:
-            self.pixels = neopixel.NeoPixel(pin=pin,n=pixel_count)
+
+    # TODO: re-implement this  
+        # else:
+        #     self.pixels = neopixel.NeoPixel(pin=pin,n=pixel_count)
 
 
     # Sets the colors of the lightstrip and returns a code depending on success or failure
-    def set_color(self, red, green, blue, pattern=0):
+    def set_color(self, colors, selected_color=0, pattern=0):
 
         # For debugging
-        print(f"rgb({red},{green},{blue}), {pattern}")
+        # print(f"rgb({red},{green},{blue}), {pattern}")
 
-        single_pixel_amperage = (red / 255) * PIXEL_AMPS + (green / 255) * PIXEL_AMPS + (blue / 255) * PIXEL_AMPS
-        total_amperage = single_pixel_amperage * self.pixel_count
+        color_amps = map(lambda c : (c[0] / 255) * PIXEL_AMPS + (c[1] / 255) * PIXEL_AMPS + (c[2] / 255) * PIXEL_AMPS, colors)
+    
+        # single_pixel_amperage = (red / 255) * PIXEL_AMPS + (green / 255) * PIXEL_AMPS + (blue / 255) * PIXEL_AMPS
+        # total_amperage = single_pixel_amperage * self.pixel_count
+
+        total_max_amperage = max(color_amps)
 
         # TODO: throw an exception and handle it at the level above
-        if total_amperage > self.max_amps:
-            print(f"Error: current draw too high. Current: {total_amperage}, max: {self.max_amps}")
+        if total_max_amperage > self.max_amps:
+            print(f"Error: current draw too high. Current: {total_max_amperage}, max: {self.max_amps}")
             return
 
         # If the 'arduino' variable is set, this sends the data over the com port
         # instead of directly via GPIO pins
         if self.arduino:
-            self.controller.send_colors(red, green, blue, pattern)
+            self.controller.send_colors(colors, selected_color, pattern)
 
         else:
-            self.pixels.fill((red, green, blue))
-            self.pixels.show()
-        
+            print(str(colors) + f" selected_color: {str(selected_color)}, pattern: {str(pattern)}")
+
 if __name__ == "__main__":
     
     strip = Lightstrip(pixel_count=30)

@@ -11,12 +11,16 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 // import FormLabel from '@material-ui/core/FormLabel';
 
+import { v4 as uuidv4 } from 'uuid';
+
 // Pre-built color circle
 import CircularColor from 'react-circular-color';
 
 // Custom color slider component
 import ColorSlider from './color-slider';
-//import ColorCircle from './color-circle';
+
+// Custom color palette component
+import ColorPalette from './color-palette.js'
 
 var tinycolor = require('tinycolor2');
 
@@ -57,45 +61,64 @@ class LightstripMain extends Component {
     constructor(props) {
         super(props);
 
+        let startingColor = {
+            r: 0,
+            g: 0, 
+            b: 0
+        };
+    
+        // attaches a unique uuid key to each color, for use in a list later
+        let startingColorPalette = [startingColor].map(c => { return { id: uuidv4(), value: c };});
+
         this.state = {
-            color: {
-                r: 0,
-                g: 0,
-                b: 0
-            },
+            color: startingColor,
             pattern: 0,
+            palette: {
+                colors: startingColorPalette, 
+                selectedColor: 0
+            }
         }
 
         this.handlePatternChange = this.handlePatternChange.bind(this);
         this.handleColorChange = this.handleColorChange.bind(this);
         this.sendLightstripColor = this.sendLightstripColor.bind(this);
+        this.handleSelectedChange = this.handleSelectedChange.bind(this);
+        this.handlePaletteQuantityChange = this.handlePaletteQuantityChange.bind(this);
     }
 
     handleColorChange(p_color) {
 
         let rgb = tinycolor(p_color).toRgb();
 
-        this.setState((prevState, props) => {
-            return {
-                color: rgb,
-                pattern: prevState.pattern
-            }
+        this.setState((prevState) => {
+            let index = prevState.palette.selectedColor;
+            prevState.color = rgb;
+            prevState.palette.colors[index].value = rgb;
+            return prevState;
         });
         // console.log("r: " + color.rgb.r);
 
-        //this.setState(color.rgb);
     }
 
     handlePatternChange(event) {
-        event.persist();
+        let p_pattern = parseInt(event.target.value);
 
-        this.setState((prevState, props) => {
-            let p_pattern = parseInt(event.target.value);
+        // note that setState is async, so the event is garbage collected by the time it's called. 
+        // this is why the parseInt function happens outside setState
+        this.setState((prevState) => {
+            prevState.pattern = p_pattern;
+            return prevState;
+        });
+    }
 
-            return {
-                color: prevState.color,
-                pattern: p_pattern
-            }
+    handleSelectedChange(index) {
+
+        let newSelectedColor = tinycolor(this.state.palette.colors[index].value).toRgb();
+
+        this.setState((prevState) => {
+            prevState.palette.selectedColor = index;
+            prevState.color = newSelectedColor;
+            return prevState;
         });
     }
 
@@ -114,12 +137,45 @@ class LightstripMain extends Component {
         else if (color === "blue")
             newColor.b = newValue;
 
-        this.setState((prevState, props) => {
-            return {
-                color: newColor,
-                pattern: prevState.pattern
+        this.handleColorChange(newColor);
+    }
+
+    handlePaletteQuantityChange(operation) {
+        
+        let newPalette = this.state.palette;
+        if (operation === "add") {
+            let newColor = {
+                id: uuidv4(),
+                value: {r: 0, g: 0, b: 0}
             }
+
+            newPalette.colors.splice(this.state.palette.selectedColor + 1, 0, newColor);
+            
+            // switch the currently selected palette to the new one
+            newPalette.selectedColor++;
+
+        } else if (operation === "remove") {            
+            // make sure there's at least one color remaining
+            if (newPalette.colors.length <= 1)
+                return
+
+            newPalette.colors.splice(this.state.palette.selectedColor, 1);
+
+            // decrement the selectedColor counter, but *not* below zero
+            if (newPalette.selectedColor > 0)
+                newPalette.selectedColor--;
+
+        } else {
+            console.error("Error: invalid palette operation");
+            return;
+        }
+
+        this.setState((prevState) => {
+            prevState.palette = newPalette;
+            prevState.color = tinycolor(newPalette.colors[newPalette.selectedColor].value).toRgb(); // this just does what handleSelectedChange() does but oh well.
+            return prevState;
         });
+
     }
 
     getRGBString(r, g, b) {
@@ -147,13 +203,16 @@ class LightstripMain extends Component {
 
         // Hard-coding http in here until it becomes a problem
         var dest = "http://" + window.location.hostname + portAddr + setEndpoint;
- 
+
+        // strip the ID and alpha values out of the colors
+        var colors = this.state.palette.colors.map(c => { return {r: c.value.r, g: c.value.g, b: c.value.b}; });
+        // console.log(colors);
+
         var colorJson = {
-            red: this.state.color.r,
-            green: this.state.color.g,
-            blue: this.state.color.b,
+            colors: colors,
             pattern: this.state.pattern,
-        }
+            selectedColor: this.state.palette.selectedColor
+        };
 
         const requestOptions = {
             method: 'POST',
@@ -175,12 +234,14 @@ class LightstripMain extends Component {
             .catch(error => {
                 console.error('Error sending colors to server', error);
             });
-
     }
 
     render() {
         const colorValue = this.state.color
         const pattern = this.state.pattern;
+        const hexValue = tinycolor(colorValue).toHexString();
+
+        // console.log(hexValue);
 
         return (
             <div>
@@ -193,7 +254,7 @@ class LightstripMain extends Component {
                     <Grid container spacing={1} alignItems="flex-start" direction="column">
 
                         <Grid item> 
-                            <CircularColor size={320} onChange={this.handleColorChange} numberOfSectors={360} />
+                            <CircularColor size={320} onChange={this.handleColorChange} numberOfSectors={360} color={hexValue} />
                         </Grid>
 
                         <Grid item> 
@@ -247,15 +308,20 @@ class LightstripMain extends Component {
                         </Grid>
 
                         <Grid item>
+                            <ColorPalette colors={this.state.palette.colors} selectedColor={this.state.palette.selectedColor} onChange={this.handleSelectedChange} onPaletteChange={this.handlePaletteQuantityChange} />
+                        </Grid>
+
+                        <Grid item>
                             <FormControl component="fieldset">
                                 {/*<FormLabel component="legend">Pattern</FormLabel>*/}
                                 <RadioGroup aria-label="pattern" value={pattern} onChange={this.handlePatternChange} style={radioButtonStyle}>
                                     <FormControlLabel value={0} control={<Radio style={radioStyle} />} label="Solid"        />
-                                    <FormControlLabel value={1} control={<Radio style={radioStyle} />} label="Dots"         />
-                                    <FormControlLabel value={2} control={<Radio style={radioStyle} />} label="Fade"         />
-                                    <FormControlLabel value={3} control={<Radio style={radioStyle} />} label="Rainbow"      />
-                                    <FormControlLabel value={4} control={<Radio style={radioStyle} />} label="Beat-Saber"   />
-                                    <FormControlLabel value={5} control={<Radio style={radioStyle} />} label="Karaoke"      />
+                                    <FormControlLabel value={1} control={<Radio style={radioStyle} />} label="Fade"         />
+                                    <FormControlLabel value={2} control={<Radio style={radioStyle} />} label="Cycle"        />
+                                    <FormControlLabel value={3} control={<Radio style={radioStyle} />} label="Random"       />
+                                    <FormControlLabel value={4} control={<Radio style={radioStyle} />} label="Rainbow"      />
+                                    <FormControlLabel value={5} control={<Radio style={radioStyle} />} label="Beat-Saber"   />
+                                    <FormControlLabel value={6} control={<Radio style={radioStyle} />} label="Karaoke"      />
                                 </RadioGroup>
                             </FormControl>
                         </Grid>
