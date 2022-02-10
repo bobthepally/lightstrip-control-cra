@@ -206,21 +206,13 @@ class LightstripMain extends Component {
 
         // strip the ID and alpha values out of the colors
         var colors = this.state.palette.colors.map(c => { return {r: c.value.r, g: c.value.g, b: c.value.b}; });
-        console.log(colors);
+        // console.log(colors);
 
         var colorJson = {
             colors: colors,
             pattern: this.state.pattern,
+            selectedColor: this.state.palette.selectedColor
         };
-
-        /*
-        var colorJson = {
-            red: this.state.color.r,
-            green: this.state.color.g,
-            blue: this.state.color.b,
-            pattern: this.state.pattern,
-        }
-        */
 
         const requestOptions = {
             method: 'POST',

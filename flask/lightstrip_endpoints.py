@@ -13,6 +13,7 @@ def post_color_set():
     try:
         data = request.get_json()
         colors = data['colors']
+        selected_color = data['selectedColor'] # Gets the selected active color from the palette
     except KeyError as e:
         msg = f"Missing key \'{e.args[0]}\' from POST request"
         print(msg, file=sys.stderr)
@@ -28,6 +29,7 @@ def post_color_set():
     try:
         # current_key = 'pattern'
         int_pattern = int(pattern)
+        int_selected_color = int(selected_color)
 
         unpack_rgb = lambda c : (int(c['r']), int(c['g']), int(c['b']))
 
@@ -39,7 +41,7 @@ def post_color_set():
         return Response(msg, status=400, mimetype="text/plain")
 
     # Make call to the lightstrip API
-    strip.set_color(color_tuples, int_pattern)
+    strip.set_color(color_tuples, int_selected_color, int_pattern)
 
     return ("Successfully set the lightstrip colors", 200)
 

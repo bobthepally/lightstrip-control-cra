@@ -26,6 +26,7 @@ Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ80
 // I swear to god this wouldn't run correctly until I initialized it like this. I'm sorry.
 uint32_t current_colors[MAX_COLORS] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 size_t color_count = 0;
+size_t selected_color = 0;
 
 // Global variable for the current color
 unsigned char currentColorArray[] = {0,0,255};
@@ -122,6 +123,13 @@ void loop() {
       }
 
       color_count = sent_color_count;
+
+      // read the selected color, and verify it exists in the array
+      recSize = pyTransfer.rxObj(data, recSize);
+      if (data >= color_count || data >= MAX_COLORS)
+        selected_color = 0;
+      else
+        selected_color = data;
 
       // read the pattern from the end of the message
       recSize = pyTransfer.rxObj(data, recSize);
