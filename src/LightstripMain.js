@@ -9,6 +9,7 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
+import Slider from '@material-ui/core/Slider';
 // import FormLabel from '@material-ui/core/FormLabel';
 
 import { v4 as uuidv4 } from 'uuid';
@@ -73,6 +74,7 @@ class LightstripMain extends Component {
         this.state = {
             color: startingColor,
             pattern: 0,
+            speed: 50,
             palette: {
                 colors: startingColorPalette, 
                 selectedColor: 0
@@ -84,6 +86,7 @@ class LightstripMain extends Component {
         this.sendLightstripColor = this.sendLightstripColor.bind(this);
         this.handleSelectedChange = this.handleSelectedChange.bind(this);
         this.handlePaletteQuantityChange = this.handlePaletteQuantityChange.bind(this);
+        this.handleSpeedChange = this.handleSpeedChange.bind(this);
     }
 
     handleColorChange(p_color) {
@@ -178,6 +181,15 @@ class LightstripMain extends Component {
 
     }
 
+    handleSpeedChange(event, p_speed) {
+
+        this.setState((prevState) => {
+            prevState.speed = p_speed;
+            return prevState;
+        });
+
+    }
+
     getRGBString(r, g, b) {
         var rgbStr = 'rgb(' + [r, g, b].join(',') + ')';
         
@@ -204,13 +216,14 @@ class LightstripMain extends Component {
         // Hard-coding http in here until it becomes a problem
         var dest = "http://" + window.location.hostname + portAddr + setEndpoint;
 
-        // strip the ID and alpha values out of the colors
+        // strip the ID and alpha values out of the list of colors
         var colors = this.state.palette.colors.map(c => { return {r: c.value.r, g: c.value.g, b: c.value.b}; });
         // console.log(colors);
 
         var colorJson = {
             colors: colors,
             pattern: this.state.pattern,
+            speed: this.state.speed,
             selectedColor: this.state.palette.selectedColor
         };
 
@@ -312,6 +325,10 @@ class LightstripMain extends Component {
                         </Grid>
 
                         <Grid item>
+                            <Slider aria-label="speed" style={{width: 200}} min={0} max={100} value={this.state.speed} onChange={this.handleSpeedChange} />
+                        </Grid>
+
+                        <Grid item>
                             <FormControl component="fieldset">
                                 {/*<FormLabel component="legend">Pattern</FormLabel>*/}
                                 <RadioGroup aria-label="pattern" value={pattern} onChange={this.handlePatternChange} style={radioButtonStyle}>
@@ -320,7 +337,7 @@ class LightstripMain extends Component {
                                     <FormControlLabel value={2} control={<Radio style={radioStyle} />} label="Cycle"        />
                                     <FormControlLabel value={3} control={<Radio style={radioStyle} />} label="Random"       />
                                     <FormControlLabel value={4} control={<Radio style={radioStyle} />} label="Rainbow"      />
-                                    <FormControlLabel value={5} control={<Radio style={radioStyle} />} label="Beat-Saber"   />
+                                    <FormControlLabel value={5} control={<Radio style={radioStyle} />} label="Beat Saber"   />
                                     <FormControlLabel value={6} control={<Radio style={radioStyle} />} label="Karaoke"      />
                                 </RadioGroup>
                             </FormControl>

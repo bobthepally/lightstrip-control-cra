@@ -38,6 +38,9 @@ unsigned long pattern_counter = 0;
 unsigned long last_pattern_time = 0;
 unsigned long interval = 25; // ms delay between pattern updates
 
+// Global variable for speed
+unsigned long currentSpeed = 50;
+
 SerialTransfer pyTransfer;
 
 uint32_t rainbow[] = {
@@ -132,10 +135,14 @@ void loop() {
       else
         selected_color = data;
 
-      // read the pattern from the end of the message
+      // read the pattern from the message
       recSize = pyTransfer.rxObj(data, recSize);
       currentPattern = data;
       
+      // read the speed from the end of the message
+      recSize = pyTransfer.rxObj(data, recSize);
+      currentSpeed = data; 
+
       pyTransfer.reset();
     }
 }
